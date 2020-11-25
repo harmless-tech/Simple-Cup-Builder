@@ -18,7 +18,8 @@ repositories {
 
 dependencies {
     providedCompile group: "org.projectlombok", name: "lombok", version: "1.18.16"
-    
+    compile group: "com.github.jezza", name: "toml", version: "1.2"
+
     // Tests
 }
 
