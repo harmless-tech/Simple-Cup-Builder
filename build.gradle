@@ -19,6 +19,7 @@ repositories {
 }
 
 dependencies {
+    // All
     providedCompile group: "org.projectlombok", name: "lombok", version: "1.18.16"
     implementation group: "com.github.jezza", name: "toml", version: "1.2"
 
@@ -38,7 +39,7 @@ buildConfig {
     buildConfigField("String", "NAME", "\"${rootProject.name}\"")
     buildConfigField("String", "VERSION", "\"${version}\"")
     buildConfigField("String", "AUTHOR_NAME", "\"Harmless_Tech\"")
-    buildConfigField("long", "BUILD_TIME", "${System.currentTimeMillis()}L")
+    buildConfigField("String", "BUILD_TIME", "\"${new Date()}\"")
 }
 
 mainClassName = "tech.harmless.simplecupbuilder/tech.harmless.simplecupbuilder.SimpleCupBuilder"

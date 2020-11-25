@@ -1,2 +1,2 @@
 # Simple Cup Builder
-TODO
+A simple build manager.
