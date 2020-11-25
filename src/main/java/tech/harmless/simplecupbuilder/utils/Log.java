@@ -17,7 +17,7 @@ public final class Log {
 
     static {
         try {
-            String dir = SimpleCupBuilder.TMP_DIR + "logs/";
+            String dir = SimpleCupBuilder.TMP_DIR;
             new File(dir).mkdirs();
 
             outStream = new PrintStream(new File(dir + "scb.log"));
@@ -77,22 +77,26 @@ public final class Log {
         System.exit(code);
     }
 
-    private static void out(String header, Object message) {
-        String out = addHeader(header) + message;
+    public static void print(Object message) {
+        System.out.println(message);
 
-        System.out.println(out);
-
-        outStream.println(out);
+        outStream.println(message);
         outStream.flush();
     }
 
-    private static void err(String header, Object message) {
-        String out = addHeader(header) + message;
+    public static void printErr(Object message) {
+        System.err.println(message);
 
-        System.err.println(out);
-
-        errStream.println(out);
+        errStream.println(message);
         errStream.flush();
+    }
+
+    private static void out(String header, Object message) {
+        print(addHeader(header) + message);
+    }
+
+    private static void err(String header, Object message) {
+        printErr(addHeader(header) + message);
     }
 
     private static String addHeader(String name) {

@@ -10,4 +10,5 @@ tmp
 *.tmp
 *.log
 
+scb_cache/
 scb_tmp/

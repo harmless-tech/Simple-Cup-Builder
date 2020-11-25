@@ -3,6 +3,8 @@ plugins {
     id "idea"
     id "application"
     id "war"
+
+    id "com.github.gmazzo.buildconfig" version "2.0.2"
 }
 
 group "tech.harmless.simplecupbuilder"
@@ -18,7 +20,7 @@ repositories {
 
 dependencies {
     providedCompile group: "org.projectlombok", name: "lombok", version: "1.18.16"
-    compile group: "com.github.jezza", name: "toml", version: "1.2"
+    implementation group: "com.github.jezza", name: "toml", version: "1.2"
 
     // Tests
 }
@@ -29,6 +31,16 @@ plugins.withType(JavaPlugin).configureEach {
     }
 }
 
+buildConfig {
+    className("BuildConfig")
+    packageName("tech.harmless.simplecupbuilder")
+
+    buildConfigField("String", "NAME", "\"${rootProject.name}\"")
+    buildConfigField("String", "VERSION", "\"${version}\"")
+    buildConfigField("String", "AUTHOR_NAME", "\"Harmless_Tech\"")
+    buildConfigField("long", "BUILD_TIME", "${System.currentTimeMillis()}L")
+}
+
 mainClassName = "tech.harmless.simplecupbuilder/tech.harmless.simplecupbuilder.SimpleCupBuilder"
 
 jar {
@@ -37,7 +49,7 @@ jar {
                 "Implementation-Title": "Gradle",
                 "Implementation-Version": archiveVersion,
                 "Main-Class": "tech.harmless.simplecupbuilder.SimpleCupBuilder",
-                "Class-Path": configurations.compile.collect { it.getName() }.join(" ")
+                "Class-Path": configurations.compileClasspath.collect { it.getName() }.join(" ")
         )
     }
 }

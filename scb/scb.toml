@@ -1,14 +1,26 @@
-git_update_timer = 5 # In minutes.
+[options]
+git_update_timer = 15 # In minutes.
+parallel_builds = false # This could break certin build processes. Could also overwhelm stuff. #TODO Implement!
+
+[process]
+windows = "pwsh" # Options: cmd, pwsh (If pwsh is installed and on the path)
+linux = "/bin/bash" # Options: Any linux shell (That is installed)
+macos = "/bin/bash" # Options: Any macos shell (That is installed)
 
 build_files = [
-    "build/test.toml",
     "git_build_hta.toml"
 ]
 
-#custom_path = [
-#    "PATH"
-#]
+[add_path]
+all = [
+]
+windows = [
+]
+linux = [
+]
+macos = [
+]
 
-#custom_alias = [
-#    "NAME=/path/to/thing or thing to replace"
-#]
+[add_env] # SCB_VERSION, BUILD_TRIGGER_TIME
+
+[alias] # This replaces anything in the command.
