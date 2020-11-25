@@ -26,5 +26,6 @@ public class SimpleCupBuilder {
         }
 
         //TODO Create required dirs?
+        //TODO Search scb directory and search for build config files.
     }
 }

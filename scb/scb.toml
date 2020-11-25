@@ -1,0 +1,14 @@
+git_update_timer = 5 # In minutes.
+
+build_files = [
+    "build/test.toml",
+    "git_build_hta.toml"
+]
+
+#custom_path = [
+#    "PATH"
+#]
+
+#custom_alias = [
+#    "NAME=/path/to/thing or thing to replace"
+#]
