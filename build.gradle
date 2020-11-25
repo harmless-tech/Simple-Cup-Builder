@@ -31,6 +31,17 @@ plugins.withType(JavaPlugin).configureEach {
 
 mainClassName = "tech.harmless.simplecupbuilder/tech.harmless.simplecupbuilder.SimpleCupBuilder"
 
+jar {
+    manifest {
+        attributes(
+                "Implementation-Title": "Gradle",
+                "Implementation-Version": archiveVersion,
+                "Main-Class": "tech.harmless.simplecupbuilder.SimpleCupBuilder",
+                "Class-Path": configurations.compile.collect { it.getName() }.join(" ")
+        )
+    }
+}
+
 application {
     mainModule = "tech.harmless.simplecupbuilder"
     mainClass = "tech.harmless.simplecupbuilder.SimpleCupBuilder"
@@ -41,9 +52,9 @@ task debug {
     group = "application"
     description = "Runs the program with assertions and custom debug args."
 
-    /*run {
-        args = ["--log-debug"]
-    }*/
+    run {
+        args = ["--debug"]
+    }
 
     doLast {
         application.applicationDefaultJvmArgs.asList().add("-ea")

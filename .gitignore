@@ -9,3 +9,5 @@ tmp
 *.temp
 *.tmp
 *.log
+
+scb_tmp/
