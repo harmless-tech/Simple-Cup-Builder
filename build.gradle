@@ -1,0 +1,52 @@
+plugins {
+    id "java"
+    id "idea"
+    id "application"
+    id "war"
+}
+
+group "tech.harmless.simplecupbuilder"
+version "0.0.1-ALPHA"
+
+sourceCompatibility = 15
+targetCompatibility = 15
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    providedCompile group: "org.projectlombok", name: "lombok", version: "1.18.16"
+    
+    // Tests
+}
+
+plugins.withType(JavaPlugin).configureEach {
+    java {
+        modularity.inferModulePath = true
+    }
+}
+
+mainClassName = "tech.harmless.simplecupbuilder/tech.harmless.simplecupbuilder.SimpleCupBuilder"
+
+application {
+    mainModule = "tech.harmless.simplecupbuilder"
+    mainClass = "tech.harmless.simplecupbuilder.SimpleCupBuilder"
+    applicationDefaultJvmArgs = ["-Dfile.encoding=utf-8", "-Xmx2048m"]
+}
+
+task debug {
+    group = "application"
+    description = "Runs the program with assertions and custom debug args."
+
+    /*run {
+        args = ["--log-debug"]
+    }*/
+
+    doLast {
+        application.applicationDefaultJvmArgs.asList().add("-ea")
+    }
+
+    finalizedBy "run"
+}
