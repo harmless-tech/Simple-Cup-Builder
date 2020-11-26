@@ -10,8 +10,8 @@ plugins {
 group "tech.harmless.simplecupbuilder"
 version "0.0.1-ALPHA"
 
-sourceCompatibility = 15
-targetCompatibility = 15
+sourceCompatibility = 14
+targetCompatibility = 14
 
 repositories {
     mavenCentral()
