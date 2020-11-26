@@ -12,15 +12,18 @@ import java.io.FileReader;
 import java.util.Date;
 import java.util.HashMap;
 
-/*
+/* TODO
  * Inject build number and other environment args.
+ * Delete tmp directory on exit?
  */
-
 public class SimpleCupBuilder {
 
     public static final String DATA_DIR = "scb/";
     public static final String CACHE_DIR = "scb_cache/";
     public static final String TMP_DIR = CACHE_DIR + "tmp/";
+
+    public static final String CUP_FILE = "cup.toml";
+    public static final String CACHE_FILE = "drink.cache";
 
     public static boolean DEBUG = false;
 
@@ -45,63 +48,15 @@ public class SimpleCupBuilder {
             }
         }
 
-        //TODO Create required dirs?
-        //TODO Search scb directory and search for build config files.
-
         //TODO Testing.
         try {
-            /*Process p1 = Runtime.getRuntime().exec("pwsh /c java", new String[]{}, new File(TMP_DIR));
-            Process p2 = p1.onExit().join();
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p2.getInputStream()));
-            StringBuilder builder = new StringBuilder();
-            String line = null;
-            while((line = reader.readLine()) != null) {
-                builder.append(line);
-                builder.append(System.getProperty("line.separator"));
-            }
-            String result = builder.toString();
-
-            BufferedReader readerErr = new BufferedReader(new InputStreamReader(p2.getErrorStream()));
-            StringBuilder builderErr = new StringBuilder();
-            String lineErr = null;
-            while((lineErr = reader.readLine()) != null) {
-                builder.append(lineErr);
-                builder.append(System.getProperty("line.separator"));
-            }
-            String resultErr = builder.toString();
-
-            System.out.println(result);
-            System.out.println(resultErr);
-            System.out.println(p2.exitValue());*/
-
-            /*ProcessBuilder pBuilder = new ProcessBuilder("pwsh", "/c", "rustc", "--version");
-            pBuilder.environment().forEach((key, value) -> {
-                System.out.println(key + "        " + value);
-            });
-            pBuilder.redirectErrorStream(true);
-            Process p1 = pBuilder.start();
-            p1.onExit().join();
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p1.getInputStream()));
-            StringBuilder builder = new StringBuilder();
-            String line;
-            while((line = reader.readLine()) != null) {
-                builder.append(line);
-                builder.append(System.getProperty("line.separator"));
-            }
-            String result = builder.toString();
-
-            System.out.println(result);
-            System.out.println(p1.exitValue());*/
-
             CommandReturn cReturn =
                     PCommand.run("pwsh /c", "rustc --version", CACHE_DIR, new String[0], new HashMap<>());
 
             Log.process("\n" + cReturn.getOutput());
             Log.process("Exit Code " + cReturn.getExitCode());
 
-            File f = new File("scb/scb.toml");
+            File f = new File("scb/cup.toml");
             BufferedReader is = new BufferedReader(new FileReader(f));
             TomlTable table = Toml.from(is);
             Log.debug(table);

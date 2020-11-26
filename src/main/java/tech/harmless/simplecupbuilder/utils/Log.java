@@ -17,7 +17,7 @@ public final class Log {
 
     static {
         try {
-            String dir = SimpleCupBuilder.TMP_DIR;
+            String dir = SimpleCupBuilder.CACHE_DIR;
             new File(dir).mkdirs();
 
             outStream = new PrintStream(new File(dir + "scb.log"));
