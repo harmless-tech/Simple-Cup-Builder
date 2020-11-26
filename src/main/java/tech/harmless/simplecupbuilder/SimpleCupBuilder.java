@@ -15,6 +15,7 @@ import java.util.HashMap;
 /* TODO
  * Inject build number and other environment args.
  * Delete tmp directory on exit?
+ * Add a way to check for new releases.
  */
 public class SimpleCupBuilder {
 
