@@ -25,20 +25,6 @@ jobs:
     name: Analyze
     runs-on: ubuntu-latest
 
-  deps:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install Deps
-        run: sudo apt-get install wget apt-transport-https gnupg
-      - name: Install Key
-        run: wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -
-      - name: Config AdoptOpenJDK Repo
-        run: echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb focal main" | sudo tee /etc/apt/sources.list.d/adoptopenjdk.list
-      - name: Update
-        run: sudo apt-get update
-      - name: Install Java
-        run: sudo apt-get install adoptopenjdk-15-hotspot
-
     strategy:
       fail-fast: false
       matrix:
@@ -48,6 +34,17 @@ jobs:
         # https://docs.github.com/en/free-pro-team@latest/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#changing-the-languages-that-are-analyzed
 
     steps:
+    - name: Install Deps
+      run: sudo apt-get install wget apt-transport-https gnupg
+    - name: Install Key
+      run: wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -
+    - name: Config AdoptOpenJDK Repo
+      run: echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb focal main" | sudo tee /etc/apt/sources.list.d/adoptopenjdk.list
+    - name: Update
+      run: sudo apt-get update
+    - name: Install Java
+      run: sudo apt-get install adoptopenjdk-15-hotspot
+      
     - name: Checkout repository
       uses: actions/checkout@v2
 
