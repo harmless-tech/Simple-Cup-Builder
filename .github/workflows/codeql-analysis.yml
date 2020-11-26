@@ -47,7 +47,7 @@ jobs:
     - name: Install Java 15
       run: sudo apt-get install adoptopenjdk-15-hotspot
     - name: Set Java Home
-      run: export JAVA_HOME=/usr/lib/jvm/adoptopenjdk-15-hotspot-amd64/
+      run: echo "JAVA_HOME=/usr/lib/jvm/adoptopenjdk-15-hotspot-amd64/" >> $GITHUB_ENV
       
     - name: Checkout repository
       uses: actions/checkout@v2
