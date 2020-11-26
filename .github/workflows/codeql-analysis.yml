@@ -34,6 +34,8 @@ jobs:
         # https://docs.github.com/en/free-pro-team@latest/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#changing-the-languages-that-are-analyzed
 
     steps:
+    - name: Remove Java 8
+      run: sudo apt-get remove adoptopenjdk-8-hotspot
     - name: Install Deps
       run: sudo apt-get install wget apt-transport-https gnupg
     - name: Install Key
@@ -44,12 +46,6 @@ jobs:
       run: sudo apt-get update
     - name: Install Java
       run: sudo apt-get install adoptopenjdk-15-hotspot
-    - name: Switch Java
-      run: sudo update-java-alternatives -s adoptopenjdk-15-hotspot-amd64
-    - name: Java Home
-      run: export JAVA_HOME=/usr/lib/jvm/adoptopenjdk-15-hotspot-amd64/
-    - name: Path
-      run: export PATH=$JAVA_HOME/bin:$PATH
       
     - name: Checkout repository
       uses: actions/checkout@v2
