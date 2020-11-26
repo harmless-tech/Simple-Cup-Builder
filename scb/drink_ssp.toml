@@ -1,0 +1,58 @@
+[drink_info]
+name = "Simple Script Prototype Drink"
+build_file_version = "1"
+
+[git]
+url = ""
+branch = "master"
+dir_name = "ssp"
+full_clean_build = false
+ssh_key_password = "" #TODO Implement!
+
+internal_build_file = "NULL" # Uses the build file in the git project. If this option is used all options below this are ignored.
+
+[build_ops]
+wrk_dir = "" # Based off of the git created directory.
+clean_before_build = [
+]
+
+[build_windows]
+pre_check = [ # These cmds must exit with a code 0 for the build to be started.
+]
+cmds = [
+    # ./gradlew --no-daemon -S build
+]
+test_cms = [
+]
+
+
+[build_linux]
+pre_check = [ # These cmds must exit with a code 0 for the build to be started.
+]
+cmds = [
+]
+test_cms = [
+]
+
+[build_macos]
+pre_check = [ # These cmds must exit with a code 0 for the build to be started.
+]
+cmds = [
+]
+test_cms = [
+]
+
+# These add options may not override options in the scb.toml file.
+[add_path]
+all = [
+]
+windows = [
+]
+linux = [
+]
+macos = [
+]
+
+[add_env] # PROJECT_NAME, BUILD_FILE_VERSION, BUILD_COUNT, BUILD_START_TIME, BUILD_COMMIT
+
+[alias] #TODO Implement!

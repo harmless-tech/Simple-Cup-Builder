@@ -35,6 +35,10 @@ public final class Log {
         }
     }
 
+    public static void process(Object message) {
+        out("PROCESS", message);
+    }
+
     public static void info(Object message) {
         out("INFO", message);
     }
