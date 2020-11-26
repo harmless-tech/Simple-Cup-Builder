@@ -8,7 +8,6 @@ build_file_version = "1"
 [git]
 url = ""
 branch = "master"
-full_clean_build = false
 ssh_key_password = "" #TODO Implement!
 
 internal_build_file = "NULL" # Uses the build file in the git project. If this option is used all options below this are ignored.
@@ -19,13 +18,14 @@ files = [ # Files to be moved to storage.
 
 [build_ops]
 wrk_dir = "" # Based off of the git created directory.
+full_clean_build = false
 clean_before_build = [
 ]
-spilt_build = false # If this is true then the build cmds are different for every platform.
-one_os_build = "" # windows, linux, macos. If this is one of these options then the build use use this platform to build other platform builds.
 build_windows = true # Allow building on windows.
 build_linux = true # Allow building on linux.
 build_macos = true # Allow building on macos.
+split_build = true # If this is true then the build cmds are different for every platform.
+one_os_build = "" # windows, linux, macos. If this is one of these options then the build use use this platform to build other platform builds.
 
 [build]
 pre_check = [ # These cmds must exit with a code 0 for the build to be started.
@@ -40,7 +40,6 @@ pre_check = [ # These cmds must exit with a code 0 for the build to be started.
 ]
 cmds = [
     # ./gradlew --no-daemon -S build
-    #["", false] # Command doesn't need to exit successful.
 ]
 test_cmds = [
 ]

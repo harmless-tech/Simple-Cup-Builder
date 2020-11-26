@@ -1,4 +1,4 @@
-package tech.harmless.simplecupbuilder.cups;
+package tech.harmless.simplecupbuilder.data;
 
 public final class DataProcessor {
 

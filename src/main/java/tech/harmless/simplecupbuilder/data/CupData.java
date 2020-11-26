@@ -1,4 +1,4 @@
-package tech.harmless.simplecupbuilder.cups;
+package tech.harmless.simplecupbuilder.data;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -27,13 +27,13 @@ public class CupData {
     // --- add_path ---
     @Getter
     @Setter
-    private String addPath_windows;
+    private String[] addPath_windows;
     @Getter
     @Setter
-    private String addPath_linux;
+    private String[] addPath_linux;
     @Getter
     @Setter
-    private String addPath_macos;
+    private String[] addPath_macos;
 
     // --- add_env ---
     @Getter

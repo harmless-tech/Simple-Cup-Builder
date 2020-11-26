@@ -1,4 +1,4 @@
-package tech.harmless.simplecupbuilder.cups;
+package tech.harmless.simplecupbuilder.data;
 
 import lombok.Getter;
 
@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 //TODO Allow this to be exported.
+//TODO Cache drink files???
 public class CacheData {
 
     @Getter
