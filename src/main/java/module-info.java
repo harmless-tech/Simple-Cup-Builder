@@ -1,4 +1,4 @@
 module tech.harmless.simplecupbuilder {
-    requires static lombok;
+    requires lombok;
     requires com.github.jezza.toml;
 }

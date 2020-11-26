@@ -1,3 +1,5 @@
+# DrinkData: Example drink config file.
+
 [drink_info]
 name = "Simple Script Prototype Drink"
 build_file_version = "1"

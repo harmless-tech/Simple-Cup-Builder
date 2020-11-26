@@ -1,15 +1,19 @@
 package tech.harmless.simplecupbuilder;
 
+import com.github.jezza.Toml;
+import com.github.jezza.TomlTable;
 import tech.harmless.simplecupbuilder.cmd.CommandReturn;
 import tech.harmless.simplecupbuilder.cmd.PCommand;
 import tech.harmless.simplecupbuilder.utils.Log;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.util.Date;
 import java.util.HashMap;
 
 /*
- * Inject build number and other enviroment args.
+ * Inject build number and other environment args.
  */
 
 public class SimpleCupBuilder {
@@ -97,6 +101,11 @@ public class SimpleCupBuilder {
 
             Log.process("\n" + cReturn.getOutput());
             Log.process("Exit Code " + cReturn.getExitCode());
+
+            File f = new File("scb/scb.toml");
+            BufferedReader is = new BufferedReader(new FileReader(f));
+            TomlTable table = Toml.from(is);
+            Log.debug(table);
         }
         catch(Exception e) {
             e.printStackTrace();
