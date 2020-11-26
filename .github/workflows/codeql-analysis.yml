@@ -74,6 +74,9 @@ jobs:
       run: ./gradlew --no-daemon -S testClasses
     - name: Build Jar
       run: ./gradlew --no-daemon -S jar
+      
+    - name: List Files [REMOVE]
+      run: ls build/libs
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
