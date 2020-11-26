@@ -4,6 +4,7 @@ plugins {
     id "application"
 
     id "com.github.gmazzo.buildconfig" version "2.0.2"
+    id "com.github.johnrengelman.shadow" version "6.1.0"
 }
 
 group "tech.harmless.simplecupbuilder"
@@ -45,9 +46,16 @@ buildConfig {
     buildConfigField("String", "BUILD_TIME", "\"${new Date()}\"")
 }
 
-mainClassName = "tech.harmless.simplecupbuilder/tech.harmless.simplecupbuilder.SimpleCupBuilder"
+mainClassName = "tech.harmless.simplecupbuilder.SimpleCupBuilder"
+
+task copyDeps(type: Copy) {
+    from configurations.runtimeClasspath
+    into "$buildDir/libs"
+}
 
 jar {
+    dependsOn "copyDeps"
+
     manifest {
         attributes(
                 "Implementation-Title": "Gradle",
