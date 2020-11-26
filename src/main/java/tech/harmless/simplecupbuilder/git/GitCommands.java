@@ -11,6 +11,7 @@ public final class GitCommands {
     }
 
     public static EnumGit statusRepo(String path) {
+        //TODO Run git status and check for the 'nothing to commit, working tree clean' message.
         return EnumGit.NULL;
     }
 }

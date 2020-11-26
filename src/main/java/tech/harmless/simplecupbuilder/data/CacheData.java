@@ -15,15 +15,20 @@ public class CacheData {
     private final Set<String> drinkIdCache;
     @Getter
     private final Map<String, String> drinkCachedCommit;
+    @Getter
+    private final Map<String, Integer> drinkBuildNumber;
 
     public CacheData() {
         drinkIdCache = new HashSet<>();
         drinkCachedCommit = new HashMap<>();
+        drinkBuildNumber = new HashMap<>();
     }
 
-    public CacheData(Set<String> drinkIdCache, Map<String, String> drinkCachedCommit) {
+    public CacheData(Set<String> drinkIdCache, Map<String, String> drinkCachedCommit,
+                     Map<String, Integer> drinkBuildNumber) {
         this.drinkIdCache = drinkIdCache;
         this.drinkCachedCommit = drinkCachedCommit;
+        this.drinkBuildNumber = drinkBuildNumber;
     }
 
     public boolean isDrinkInCache(String id) {
@@ -34,6 +39,10 @@ public class CacheData {
         return drinkCachedCommit.get(id);
     }
 
+    public Integer getDrinkBuild(String id) {
+        return drinkBuildNumber.get(id);
+    }
+
     public void addDrinkId(String id) {
         drinkIdCache.add(id);
     }
@@ -42,9 +51,19 @@ public class CacheData {
         drinkCachedCommit.put(id, commit);
     }
 
+    public void incrementDrinkBuild(String id) {
+        Integer i = drinkBuildNumber.get(id);
+
+        if(i == null)
+            drinkBuildNumber.put(id, 1);
+        else
+            drinkBuildNumber.put(id, ++i);
+    }
+
     public void removeDrink(String id) {
         drinkIdCache.remove(id);
         drinkCachedCommit.remove(id);
+        drinkBuildNumber.remove(id);
     }
 
     public void pruneCache(String id) {
