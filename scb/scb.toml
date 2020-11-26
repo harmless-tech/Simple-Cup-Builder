@@ -12,8 +12,6 @@ drinks = [
 ]
 
 [add_path]
-all = [
-]
 windows = [
 ]
 linux = [

@@ -15,6 +15,15 @@ internal_build_file = "NULL" # Uses the build file in the git project. If this o
 wrk_dir = "" # Based off of the git created directory.
 clean_before_build = [
 ]
+spilt_build = false # If this is true then the build cmds are different for every platform.
+
+[build]
+pre_check = [ # These cmds must exit with a code 0 for the build to be started.
+]
+cmds = [
+]
+test_cmds = [
+]
 
 [build_windows]
 pre_check = [ # These cmds must exit with a code 0 for the build to be started.
@@ -22,7 +31,7 @@ pre_check = [ # These cmds must exit with a code 0 for the build to be started.
 cmds = [
     # ./gradlew --no-daemon -S build
 ]
-test_cms = [
+test_cmds = [
 ]
 
 
@@ -31,7 +40,7 @@ pre_check = [ # These cmds must exit with a code 0 for the build to be started.
 ]
 cmds = [
 ]
-test_cms = [
+test_cmds = [
 ]
 
 [build_macos]
@@ -39,13 +48,11 @@ pre_check = [ # These cmds must exit with a code 0 for the build to be started.
 ]
 cmds = [
 ]
-test_cms = [
+test_cmds = [
 ]
 
 # These add options may not override options in the scb.toml file.
 [add_path]
-all = [
-]
 windows = [
 ]
 linux = [
