@@ -49,7 +49,7 @@ jobs:
     - name: Java Home
       run: export JAVA_HOME=/usr/lib/jvm/adoptopenjdk-15-hotspot-amd64/
     - name: Path
-      run: export PATH=$PATH:$JAVA_HOME
+      run: export PATH=$JAVA_HOME/bin:$PATH
       
     - name: Checkout repository
       uses: actions/checkout@v2
