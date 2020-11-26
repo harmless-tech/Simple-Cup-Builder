@@ -44,8 +44,10 @@ jobs:
       run: echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb focal main" | sudo tee /etc/apt/sources.list.d/adoptopenjdk.list
     - name: Update
       run: sudo apt-get update
-    - name: Install Java
+    - name: Install Java 15
       run: sudo apt-get install adoptopenjdk-15-hotspot
+    - name: Set Java Home
+      run: export JAVA_HOME=/usr/lib/jvm/adoptopenjdk-15-hotspot-amd64/
       
     - name: Checkout repository
       uses: actions/checkout@v2
