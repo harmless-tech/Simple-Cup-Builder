@@ -34,6 +34,8 @@ jobs:
         # https://docs.github.com/en/free-pro-team@latest/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#changing-the-languages-that-are-analyzed
 
     steps:
+    - name: Java Version
+      run: java -version
     - name: Install Deps
       run: sudo apt-get install wget apt-transport-https gnupg
     - name: Install Key
