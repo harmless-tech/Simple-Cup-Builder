@@ -6,8 +6,8 @@ parallel_builds = false # This could break certin build processes. Could also ov
 
 [process]
 windows = "pwsh /c" # Options: cmd /c, pwsh /c, or others (If pwsh is installed and on the path)
-linux = ""
-macos = ""
+#linux = "" TODO Remove or keep?
+#macos = "" TODO Remove or keep?
 
 drinks = [
     "git_build_hta.toml"

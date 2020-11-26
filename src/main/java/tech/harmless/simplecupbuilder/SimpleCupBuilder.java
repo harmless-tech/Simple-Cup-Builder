@@ -20,7 +20,6 @@ public class SimpleCupBuilder {
 
     public static final String DATA_DIR = "scb/";
     public static final String CACHE_DIR = "scb_cache/";
-    public static final String GIT_DIR = CACHE_DIR + "git/";
     public static final String TMP_DIR = CACHE_DIR + "tmp/";
 
     public static boolean DEBUG = false;
@@ -116,7 +115,6 @@ public class SimpleCupBuilder {
     private static void createDirs() {
         new File(DATA_DIR).mkdirs();
         new File(CACHE_DIR).mkdirs();
-        new File(GIT_DIR).mkdirs();
         new File(TMP_DIR).mkdirs();
     }
 }
