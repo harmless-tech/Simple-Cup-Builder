@@ -34,8 +34,6 @@ jobs:
         # https://docs.github.com/en/free-pro-team@latest/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#changing-the-languages-that-are-analyzed
 
     steps:
-    - name: Java Version
-      run: java -version
     - name: Install Deps
       run: sudo apt-get install wget apt-transport-https gnupg
     - name: Install Key
@@ -46,6 +44,8 @@ jobs:
       run: sudo apt-get update
     - name: Install Java
       run: sudo apt-get install adoptopenjdk-15-hotspot
+    - name: Switch Java
+      run: sudo update-java-alternatives -s adoptopenjdk-15-hotspot-amd64
       
     - name: Checkout repository
       uses: actions/checkout@v2
