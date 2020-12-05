@@ -1,12 +1,12 @@
-package tech.harmless.simplecupbuilder.git;
+package tech.harmless.simplecupbuilder.cmd;
 
 import tech.harmless.simplecupbuilder.SimpleCupBuilder;
-import tech.harmless.simplecupbuilder.cmd.Command;
+import tech.harmless.simplecupbuilder.git.EnumGit;
 import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
 
 //TODO Add support for cmd line options.
 //TODO Better error reporting.
-public final class GitCommands {
+public final class GitCommand {
 
     public static EnumGit clone(String id, String url) {
         return EnumGit.NULL;
@@ -23,7 +23,7 @@ public final class GitCommands {
 
     public static String commitHash(String id) { //TODO Null check.
         if(id != null) {
-            FinalTuple<Integer, String> cReturn = Command.run("pwsh /c",
+            FinalTuple<Integer, String> cReturn = ProcessCommand.run("pwsh /c",
                     "git log -1 --pretty=format:\"%H\"", SimpleCupBuilder.BUILD_DIR + id,
                     new String[0], null);
 

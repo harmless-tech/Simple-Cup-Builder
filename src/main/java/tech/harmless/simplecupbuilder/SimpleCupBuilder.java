@@ -1,7 +1,7 @@
 package tech.harmless.simplecupbuilder;
 
-import tech.harmless.simplecupbuilder.cmd.Command;
-import tech.harmless.simplecupbuilder.git.GitCommands;
+import tech.harmless.simplecupbuilder.cmd.ProcessCommand;
+import tech.harmless.simplecupbuilder.cmd.GitCommand;
 import tech.harmless.simplecupbuilder.utils.Log;
 import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
 
@@ -73,12 +73,12 @@ public class SimpleCupBuilder {
         //TODO Testing.
         try {
             FinalTuple<Integer, String> cReturn =
-                    Command.run("pwsh /c", "rustc --version", CACHE_DIR, new String[0], new HashMap<>());
+                    ProcessCommand.run("pwsh /c", "rustc --version", CACHE_DIR, new String[0], new HashMap<>());
 
             Log.process("\n" + cReturn.getY());
             Log.process("Exit Code " + cReturn.getX());
 
-            cReturn = Command.run("pwsh /c", "git status", CACHE_DIR, new String[0], new HashMap<>());
+            cReturn = ProcessCommand.run("pwsh /c", "git status", CACHE_DIR, new String[0], new HashMap<>());
 
             Log.process("\n" + cReturn.getY());
             Log.process("Exit Code " + cReturn.getX());
@@ -88,7 +88,7 @@ public class SimpleCupBuilder {
             TomlTable table = Toml.from(is);
             Log.debug(table);*/
 
-            GitCommands.commitHash("l");
+            GitCommand.commitHash("l");
         }
         catch(Exception e) {
             e.printStackTrace();

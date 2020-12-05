@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+//TODO Make synced.
 public final class Log {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSSS", Locale.ENGLISH);
@@ -27,7 +28,7 @@ public final class Log {
         catch(IOException e) {
             System.err.println("Could not setup loggers!");
             e.printStackTrace();
-            System.exit(-1);
+            System.exit(EnumExitCodes.LOG_SETUP_FAILURE);
         }
     }
 

@@ -1,5 +1,6 @@
 package tech.harmless.simplecupbuilder.cmd;
 
+import tech.harmless.simplecupbuilder.utils.EnumExitCodes;
 import tech.harmless.simplecupbuilder.utils.Log;
 import tech.harmless.simplecupbuilder.utils.Os;
 import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
@@ -13,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public final class Command {
+public final class ProcessCommand {
 
     //TODO Better way for cmdLine?
     //TODO Refactor!
@@ -58,7 +59,7 @@ public final class Command {
         }
         catch(IOException e) {
             Log.exception(e);
-            Log.fatal(-22, "Failure when starting a process!");
+            Log.fatal(EnumExitCodes.PROCESS_START_FAILURE, "Failure when starting a process!");
         }
 
         return new FinalTuple<>(Integer.MIN_VALUE, "FATAL - COMMAND FAILED");

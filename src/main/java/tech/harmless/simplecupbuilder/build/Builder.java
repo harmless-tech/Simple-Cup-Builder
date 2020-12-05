@@ -1,6 +1,7 @@
 package tech.harmless.simplecupbuilder.build;
 
-public class Builder {
+//TODO Maybe use Async instead of threads?
+public class Builder implements Runnable {
 
     public Builder() {
 
@@ -8,5 +9,10 @@ public class Builder {
 
     public void triggerBuild() {
 
+    }
+
+    @Override
+    public void run() {
+        throw new RuntimeException("Not implemented!");
     }
 }
