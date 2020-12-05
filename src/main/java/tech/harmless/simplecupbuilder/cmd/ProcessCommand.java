@@ -16,10 +16,16 @@ import java.util.Map;
 
 public final class ProcessCommand {
 
+    private static final FinalTuple<Integer, String> errTuple =
+            new FinalTuple<>(Integer.MIN_VALUE, "FATAL - COMMAND FAILED");
+
     //TODO Better way for cmdLine?
     //TODO Refactor!
     public static FinalTuple<Integer, String> run(String cmdLine, String command, String wrkDir, String[] addPath,
-                                 Map<String, String> addEnv) {
+                                                  Map<String, String> addEnv) {
+        if(cmdLine == null || command == null || wrkDir == null)
+            return errTuple;
+
         File workDir = new File(wrkDir);
         workDir.mkdirs();
 
@@ -61,6 +67,6 @@ public final class ProcessCommand {
             Log.fatal(EnumExitCodes.PROCESS_START_FAILURE, "Failure when starting a process!");
         }
 
-        return new FinalTuple<>(Integer.MIN_VALUE, "FATAL - COMMAND FAILED");
+        return errTuple;
     }
 }

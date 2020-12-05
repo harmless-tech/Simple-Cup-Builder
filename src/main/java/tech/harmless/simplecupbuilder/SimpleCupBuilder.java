@@ -1,13 +1,11 @@
 package tech.harmless.simplecupbuilder;
 
-import tech.harmless.simplecupbuilder.cmd.ProcessCommand;
+import tech.harmless.simplecupbuilder.build.BuildManager;
 import tech.harmless.simplecupbuilder.cmd.GitCommand;
 import tech.harmless.simplecupbuilder.utils.Log;
-import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
 
 import java.io.File;
 import java.util.Date;
-import java.util.HashMap;
 
 /* TODO
  * Inject build number and other environment args.
@@ -70,6 +68,18 @@ public class SimpleCupBuilder {
             }
         }
 
+        // Setup Processes
+        BuildManager buildManager = new BuildManager();
+        // CONSOLE
+
+        ThreadGroup threadGroup = new ThreadGroup("Main Processes");
+
+        Thread buildManagerThread = new Thread(threadGroup, buildManager, "Build Manager Thread");
+        Thread consoleThread = new Thread(threadGroup, null, "Console Thread");
+
+        buildManagerThread.start();
+        consoleThread.start();
+
         //TODO Testing.
         try {
             //FinalTuple<Integer, String> cReturn =
@@ -98,6 +108,17 @@ public class SimpleCupBuilder {
 
         //TODO Start BuildManager Thread.
         //TODO Start Console input Thread.
+
+        // End
+        try {
+            buildManagerThread.join();
+            consoleThread.join();
+        }
+        catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Log.info(BuildConfig.NAME + " closing...");
     }
 
     private static void createDirs() {

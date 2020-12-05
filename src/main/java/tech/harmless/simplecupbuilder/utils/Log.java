@@ -37,7 +37,7 @@ public final class Log {
         if(processName == null || cmd == null)
             return;
 
-        String str = "\nProcess " + processName + " exited with exit code " + cmd.getX() + ".\n" + cmd.getY() + "\n";
+        String str = "\nProcess " + processName + " exited with exit code " + cmd.getX() + ".\n" + cmd.getY();
         out("PROCESS", str);
     }
 

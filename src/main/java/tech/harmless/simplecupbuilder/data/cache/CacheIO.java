@@ -10,6 +10,8 @@ public final class CacheIO {
     public static final Object syncObj = new Object(); // Must sync with this object when accessing cache.
     public static final HashMap<String, CacheData> cache = new HashMap<>();
 
+    private static final String[] emptyStrArray = new String[0];
+
     // Cache import/export.
 
     public static CacheData importCache() {
@@ -55,9 +57,9 @@ public final class CacheIO {
                 removeList.forEach(cache::remove);
             }
 
-            return removeList.toArray(new String[0]);
+            return removeList.toArray(emptyStrArray);
         }
 
-        return new String[0];
+        return emptyStrArray;
     }
 }
