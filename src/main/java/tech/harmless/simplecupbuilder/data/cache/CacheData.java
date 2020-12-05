@@ -3,7 +3,7 @@ package tech.harmless.simplecupbuilder.data.cache;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO Allow this to be exported.
+//TODO Allow this to be exported and imported.
 class CacheData {
 
     // General Info

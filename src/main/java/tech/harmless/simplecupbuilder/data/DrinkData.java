@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import java.util.Map;
 
+//TODO Update this to latest drink file standard.
 public class DrinkData {
 
     // --- drink_info ---
@@ -22,7 +23,9 @@ public class DrinkData {
     @Getter
     protected String git_sshKeyPassword;
 
-    // internal_build_file does not need a variable.
+    // --- ---
+    @Getter
+    protected String internal_build_file;
 
     // --- export ---
     @Getter

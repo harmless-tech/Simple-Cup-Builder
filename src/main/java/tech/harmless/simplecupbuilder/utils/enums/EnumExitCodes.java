@@ -1,4 +1,4 @@
-package tech.harmless.simplecupbuilder.utils;
+package tech.harmless.simplecupbuilder.utils.enums;
 
 /**
  * A class that holds all of the exit codes that this program can produce.

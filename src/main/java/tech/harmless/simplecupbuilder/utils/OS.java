@@ -1,38 +1,38 @@
 package tech.harmless.simplecupbuilder.utils;
 
-public final class Os {
+public final class OS {
 
-    public enum EnumOs {
+    public enum EnumOS {
         WINDOWS,
         LINUX,
         MACOS
     }
 
-    public static EnumOs getOs() {
+    public static EnumOS getOs() {
         String os = System.getProperty("os.name");
 
         if(os.toLowerCase().contains("win"))
-            return EnumOs.WINDOWS;
+            return EnumOS.WINDOWS;
 
         if(os.toLowerCase().contains("mac"))
-            return EnumOs.MACOS;
+            return EnumOS.MACOS;
 
-        return EnumOs.LINUX; // Defaults to Linux.
+        return EnumOS.LINUX; // Defaults to Linux.
     }
 
     public static String getPathName() {
-        EnumOs os = getOs();
+        EnumOS os = getOs();
 
-        if(os == EnumOs.WINDOWS)
+        if(os == EnumOS.WINDOWS)
             return "Path";
 
         return "PATH";
     }
 
     public static String getPathSep() {
-        EnumOs os = getOs();
+        EnumOS os = getOs();
 
-        if(os == EnumOs.WINDOWS)
+        if(os == EnumOS.WINDOWS)
             return ";";
 
         return ":";

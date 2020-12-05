@@ -8,15 +8,15 @@ public class CupData {
 
     // --- options ---
     @Getter
-    protected int options_gitUpdateTimer;
+    protected long options_gitUpdateTimer;
     @Getter
     protected boolean options_parallelBuilds;
+    @Getter
+    protected String[] options_drinks;
 
     // --- process ---
     @Getter
     protected String process_windows;
-    @Getter
-    protected String[] drinks;
 
     // --- add_path ---
     @Getter

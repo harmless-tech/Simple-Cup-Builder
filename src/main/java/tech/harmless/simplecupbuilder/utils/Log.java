@@ -1,6 +1,7 @@
 package tech.harmless.simplecupbuilder.utils;
 
 import tech.harmless.simplecupbuilder.SimpleCupBuilder;
+import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
 import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
 
 import java.io.IOException;

@@ -7,9 +7,9 @@ import java.util.List;
 //TODO Needs to be synced.
 public final class CacheIO {
 
-    public static final Object syncObj = new Object(); // Must sync with this object when accessing cache.
-    public static final HashMap<String, CacheData> cache = new HashMap<>();
-    public static final int cacheVersion = 1;
+    private static final Object syncObj = new Object(); // Must sync with this object when accessing cache.
+    private static final HashMap<String, CacheData> cache = new HashMap<>();
+    private static final int cacheVersion = 1;
 
     private static final String[] emptyStrArray = new String[0];
 
@@ -20,6 +20,7 @@ public final class CacheIO {
         //return null;
     }
 
+    //TODO This method should be called when there is a change to the cache.
     public static boolean exportCache() {
         throw new RuntimeException("Not implemented!");
     }
@@ -40,6 +41,7 @@ public final class CacheIO {
         return false;
     }
 
+    //TODO Maybe this should prune and setup cache.
     public static String[] prune(String[] ids) {
         if(ids.length > 0) {
             List<String> removeList = new ArrayList<>();

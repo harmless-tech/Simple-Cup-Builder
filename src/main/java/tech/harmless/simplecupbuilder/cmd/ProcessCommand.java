@@ -1,8 +1,8 @@
 package tech.harmless.simplecupbuilder.cmd;
 
-import tech.harmless.simplecupbuilder.utils.EnumExitCodes;
+import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
 import tech.harmless.simplecupbuilder.utils.Log;
-import tech.harmless.simplecupbuilder.utils.Os;
+import tech.harmless.simplecupbuilder.utils.OS;
 import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
 
 import java.io.BufferedReader;
@@ -30,7 +30,7 @@ public final class ProcessCommand {
         workDir.mkdirs();
 
         List<String> cmd = new ArrayList<>();
-        if(Os.getOs() == Os.EnumOs.WINDOWS) //TODO Add support for other OS shells.
+        if(OS.getOs() == OS.EnumOS.WINDOWS) //TODO Add support for other OS shells.
             cmd.addAll(Arrays.asList(cmdLine.split(" ")));
         cmd.addAll(Arrays.asList(command.split(" ")));
 
@@ -40,8 +40,8 @@ public final class ProcessCommand {
         if(addEnv != null)
             builder.environment().putAll(addEnv);
 
-        String pathName = Os.getPathName();
-        String pathSep = Os.getPathSep();
+        String pathName = OS.getPathName();
+        String pathSep = OS.getPathSep();
 
         StringBuilder pathBuilder = new StringBuilder(builder.environment().get(pathName));
         for(String add : addPath)

@@ -2,18 +2,14 @@ package tech.harmless.simplecupbuilder;
 
 import tech.harmless.simplecupbuilder.build.BuildManager;
 import tech.harmless.simplecupbuilder.cmd.GitCommand;
-import tech.harmless.simplecupbuilder.utils.EnumExitCodes;
+import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
 import tech.harmless.simplecupbuilder.utils.Log;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
-import java.nio.file.Files;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.FileAttribute;
 import java.util.Date;
 
 /* TODO
@@ -76,6 +72,11 @@ public class SimpleCupBuilder {
             instanceLock = new FileOutputStream(INSTANCE_LOCK_FILE);
             FileChannel fc = instanceLock.getChannel();
             lock = fc.tryLock();
+
+            if(lock == null) {
+                System.err.println("Could not create instance lock! Currently held by another program!");
+                System.exit(EnumExitCodes.LOCK_SETUP_FAILURE);
+            }
         }
         catch(IOException e) {
             System.err.println("Could not create instance lock!");
@@ -109,7 +110,7 @@ public class SimpleCupBuilder {
         Thread consoleThread = new Thread(threadGroup, null, "Console Thread");
 
         buildManagerThread.start();
-        consoleThread.start();
+        consoleThread.start(); //TODO Allow user input.
 
         //TODO Testing.
         try {
@@ -143,7 +144,7 @@ public class SimpleCupBuilder {
         // End
         try {
             buildManagerThread.join();
-            consoleThread.join();
+            consoleThread.join(); //TODO This thread should end when the buildManager one does.
         }
         catch(InterruptedException e) {
             e.printStackTrace();
