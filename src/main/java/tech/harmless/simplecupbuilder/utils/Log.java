@@ -17,8 +17,8 @@ public final class Log {
 
     static {
         try {
-            String dir = SimpleCupBuilder.CACHE_DIR;
-            new File(dir).mkdirs();
+            String dir = SimpleCupBuilder.INTERNAL_DIR;
+            //new File(dir).mkdirs(); TODO All "top" dirs are created at the start.
 
             outStream = new PrintStream(new File(dir + "scb.log"));
             outStream.println("Out logging init at " + new Date() + ".");

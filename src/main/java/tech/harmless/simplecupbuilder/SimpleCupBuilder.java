@@ -16,16 +16,32 @@ import java.util.HashMap;
  * Inject build number and other environment args.
  * Delete tmp directory on exit?
  * Add a way to check for new releases.
+ *
+ * Thread for build manager, builder, wait timer.
+ * File metadata for cache file.
+ * Multiple cache files.
+ * Custom file format and parser (for build files).
+ * user interface (console and gui)
+ * (op=true) for build command options.
  */
 public class SimpleCupBuilder {
 
+    // Top level directories.
     public static final String DATA_DIR = "scb/";
-    public static final String CACHE_DIR = DATA_DIR + "cache/";
-    public static final String TMP_DIR = DATA_DIR + "tmp/";
+    public static final String INTERNAL_DIR = DATA_DIR + ".scb/";
+    public static final String CACHE_DIR = INTERNAL_DIR + "cache/";
+    public static final String BUILD_DIR = INTERNAL_DIR + "build/";
+    public static final String ARCHIVES_DIR = INTERNAL_DIR + "archives/";
+    public static final String TMP_DIR = INTERNAL_DIR + "tmp/";
 
-    public static final String CUP_FILE = "cup.toml";
-    public static final String CACHE_FILE = "drink.cache";
+    // File extensions.
+    public static final String CONFIG_FILE_EXT = ".toml";
+    public static final String CACHE_FILE_EXT = ".cache";
 
+    // Files.
+    public static final String CUP_FILE = DATA_DIR + "cup" + CONFIG_FILE_EXT;
+
+    // Dynamic options.
     public static boolean DEBUG = false;
 
     public static void main(String[] args) {

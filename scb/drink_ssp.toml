@@ -1,9 +1,10 @@
 # DrinkData: Example drink config file.
+#TODO Change to custom build file.
 
 [drink_info]
 name = "Simple Script Prototype Drink"
 id = "sspd" # Drink ids cannot conflict.
-build_file_version = "1"
+#build_file_version = "1" # Replaced with hashing file contents.
 
 [git]
 url = ""
@@ -25,7 +26,7 @@ build_windows = true # Allow building on windows.
 build_linux = true # Allow building on linux.
 build_macos = true # Allow building on macos.
 split_build = true # If this is true then the build cmds are different for every platform.
-one_os_build = "" # windows, linux, macos. If this is one of these options then the build use use this platform to build other platform builds.
+single_build = "" # windows, linux, macos. If this is one of these options then the build use use this platform to build other platform builds.
 
 [build]
 pre_check = [ # These cmds must exit with a code 0 for the build to be started.

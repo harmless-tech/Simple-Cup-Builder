@@ -1,24 +1,21 @@
-package tech.harmless.simplecupbuilder.data;
-
-import lombok.Getter;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+package tech.harmless.simplecupbuilder.data.cache;
 
 //TODO Allow this to be exported.
 //TODO Cache drink files???
-public class CacheData {
+//TODO Hash for drink files.
+//TODO Split off methods.
+class CacheData {
 
-    @Getter
-    private final Set<String> drinkIdCache;
-    @Getter
-    private final Map<String, String> drinkCachedCommit;
-    @Getter
-    private final Map<String, Integer> drinkBuildNumber;
+    protected String id;
+    protected String name;
+    protected String fileHash;
+    protected String iFileHash;
 
-    public CacheData() {
+    // Build Info
+    protected String commitHash;
+    protected int buildNumber;
+
+    /*public CacheData() {
         drinkIdCache = new HashSet<>();
         drinkCachedCommit = new HashMap<>();
         drinkBuildNumber = new HashMap<>();
@@ -69,5 +66,5 @@ public class CacheData {
     public void pruneCache(String id) {
         //TODO Add a way to prune the cache.
         throw new RuntimeException("Not implemented!");
-    }
+    }*/
 }
