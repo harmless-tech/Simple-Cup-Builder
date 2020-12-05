@@ -49,6 +49,6 @@ public final class GitCommand {
                 return cReturn.getY();
         }
 
-        return null;
+        return "NO COMMITS";
     }
 }

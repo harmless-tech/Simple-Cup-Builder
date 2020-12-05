@@ -89,6 +89,7 @@ public class SimpleCupBuilder {
             Log.debug(table);*/
 
             GitCommand.commitHash("l");
+            GitCommand.commitHash("dddp");
         }
         catch(Exception e) {
             e.printStackTrace();
