@@ -1,6 +1,7 @@
 package tech.harmless.simplecupbuilder.utils;
 
 import tech.harmless.simplecupbuilder.SimpleCupBuilder;
+import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -9,6 +10,7 @@ import java.util.Date;
 import java.util.Locale;
 
 //TODO Make synced.
+//TODO Add null checks.
 public final class Log {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSSS", Locale.ENGLISH);
@@ -32,9 +34,9 @@ public final class Log {
         }
     }
 
-    //TODO Change to use CommandReturn.
-    public static void process(Object message) {
-        out("PROCESS", message);
+    public static void process(String processName, FinalTuple<Integer, String> cmd) {
+        String str = "\nProcess " + processName + " exited with exit code " + cmd.getX() + ".\n" + cmd.getY() + "\n";
+        out("PROCESS", str);
     }
 
     public static void info(Object message) {

@@ -72,16 +72,16 @@ public class SimpleCupBuilder {
 
         //TODO Testing.
         try {
-            FinalTuple<Integer, String> cReturn =
-                    ProcessCommand.run("pwsh /c", "rustc --version", CACHE_DIR, new String[0], new HashMap<>());
+            //FinalTuple<Integer, String> cReturn =
+                   //ProcessCommand.run("pwsh /c", "rustc --version", CACHE_DIR, new String[0], new HashMap<>());
 
-            Log.process("\n" + cReturn.getY());
-            Log.process("Exit Code " + cReturn.getX());
+            //Log.process("\n" + cReturn.getY());
+            //Log.process("Exit Code " + cReturn.getX());
 
-            cReturn = ProcessCommand.run("pwsh /c", "git status", CACHE_DIR, new String[0], new HashMap<>());
+            //cReturn = ProcessCommand.run("pwsh /c", "git status", CACHE_DIR, new String[0], new HashMap<>());
 
-            Log.process("\n" + cReturn.getY());
-            Log.process("Exit Code " + cReturn.getX());
+            //Log.process("\n" + cReturn.getY());
+            //Log.process("Exit Code " + cReturn.getX());
 
             /*File f = new File(CUP_FILE);
             BufferedReader is = new BufferedReader(new FileReader(f));
@@ -94,6 +94,9 @@ public class SimpleCupBuilder {
             e.printStackTrace();
         }
         //
+
+        //TODO Start BuildManager Thread.
+        //TODO Start Console input Thread.
     }
 
     private static void createDirs() {
