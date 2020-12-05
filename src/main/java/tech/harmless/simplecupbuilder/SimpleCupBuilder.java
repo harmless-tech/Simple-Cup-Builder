@@ -20,8 +20,8 @@ import java.util.HashMap;
 public class SimpleCupBuilder {
 
     public static final String DATA_DIR = "scb/";
-    public static final String CACHE_DIR = "scb_cache/";
-    public static final String TMP_DIR = CACHE_DIR + "tmp/";
+    public static final String CACHE_DIR = DATA_DIR + "cache/";
+    public static final String TMP_DIR = DATA_DIR + "tmp/";
 
     public static final String CUP_FILE = "cup.toml";
     public static final String CACHE_FILE = "drink.cache";
