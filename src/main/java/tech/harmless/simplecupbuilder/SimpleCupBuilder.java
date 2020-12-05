@@ -2,9 +2,18 @@ package tech.harmless.simplecupbuilder;
 
 import tech.harmless.simplecupbuilder.build.BuildManager;
 import tech.harmless.simplecupbuilder.cmd.GitCommand;
+import tech.harmless.simplecupbuilder.utils.EnumExitCodes;
 import tech.harmless.simplecupbuilder.utils.Log;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileAttribute;
 import java.util.Date;
 
 /* TODO
@@ -39,11 +48,13 @@ public class SimpleCupBuilder {
     public static final String META_FILE_EXT = ".metadata"; // Used to keep track of cache info. (Cache version)
     public static final String HASH_FILE_EXT = ".hash";
     public static final String COMPRESSED_FILE_EXT = ".zip";
+    public static final String INSTANCE_LOCK_FILE_EXT = ".instance_lock";
 
     // File prefixes.
     public static final String ARCHIVE_FILE_PREFIX = "archive-";
 
     // Files.
+    public static final String INSTANCE_LOCK_FILE = TMP_DIR + INSTANCE_LOCK_FILE_EXT;
     public static final String LOG_FILE = INTERNAL_DIR + "scb" + LOG_FILE_EXT;
     public static final String LOG_ERR_FILE = INTERNAL_DIR + "scb-err" + LOG_FILE_EXT;
     public static final String CUP_FILE = DATA_DIR + "cup" + CONFIG_FILE_EXT;
@@ -51,11 +62,27 @@ public class SimpleCupBuilder {
     // Dynamic options.
     public static boolean DEBUG = false;
 
+    //TODO Move some things to their own methods.
     public static void main(String[] args) {
         // Before
         System.out.println("Program launch at " + new Date() + ".");
 
         createDirs();
+
+        // Lock Check
+        FileOutputStream instanceLock = null;
+        FileLock lock = null;
+        try {
+            instanceLock = new FileOutputStream(INSTANCE_LOCK_FILE);
+            FileChannel fc = instanceLock.getChannel();
+            lock = fc.tryLock();
+        }
+        catch(IOException e) {
+            System.err.println("Could not create instance lock!");
+            e.printStackTrace();
+            System.exit(EnumExitCodes.LOCK_SETUP_FAILURE);
+        }
+
 
         // After
         Log.info("Name: " + BuildConfig.NAME + ", Version: " + BuildConfig.VERSION +
@@ -123,6 +150,18 @@ public class SimpleCupBuilder {
         }
 
         Log.info(BuildConfig.NAME + " closing...");
+
+        try {
+            if(lock != null)
+                lock.close();
+
+            instanceLock.close();
+        }
+        catch(IOException e) {
+            System.err.println("Could not release instance lock!");
+            e.printStackTrace();
+            System.exit(EnumExitCodes.LOCK_RELEASE_FAILURE);
+        }
     }
 
     private static void createDirs() {
