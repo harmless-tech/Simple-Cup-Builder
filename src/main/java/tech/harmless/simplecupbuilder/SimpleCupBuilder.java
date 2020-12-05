@@ -1,15 +1,11 @@
 package tech.harmless.simplecupbuilder;
 
-import com.github.jezza.Toml;
-import com.github.jezza.TomlTable;
-import tech.harmless.simplecupbuilder.cmd.CommandReturn;
-import tech.harmless.simplecupbuilder.cmd.PCommand;
+import tech.harmless.simplecupbuilder.cmd.Command;
 import tech.harmless.simplecupbuilder.git.GitCommands;
 import tech.harmless.simplecupbuilder.utils.Log;
+import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -76,16 +72,16 @@ public class SimpleCupBuilder {
 
         //TODO Testing.
         try {
-            CommandReturn cReturn =
-                    PCommand.run("pwsh /c", "rustc --version", CACHE_DIR, new String[0], new HashMap<>());
+            FinalTuple<Integer, String> cReturn =
+                    Command.run("pwsh /c", "rustc --version", CACHE_DIR, new String[0], new HashMap<>());
 
-            Log.process("\n" + cReturn.getOutput());
-            Log.process("Exit Code " + cReturn.getExitCode());
+            Log.process("\n" + cReturn.getY());
+            Log.process("Exit Code " + cReturn.getX());
 
-            cReturn = PCommand.run("pwsh /c", "git status", CACHE_DIR, new String[0], new HashMap<>());
+            cReturn = Command.run("pwsh /c", "git status", CACHE_DIR, new String[0], new HashMap<>());
 
-            Log.process("\n" + cReturn.getOutput());
-            Log.process("Exit Code " + cReturn.getExitCode());
+            Log.process("\n" + cReturn.getY());
+            Log.process("Exit Code " + cReturn.getX());
 
             /*File f = new File(CUP_FILE);
             BufferedReader is = new BufferedReader(new FileReader(f));

@@ -2,6 +2,7 @@ package tech.harmless.simplecupbuilder.cmd;
 
 import tech.harmless.simplecupbuilder.utils.Log;
 import tech.harmless.simplecupbuilder.utils.Os;
+import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,13 +13,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public final class PCommand {
+public final class Command {
 
     //TODO Better way for cmdLine?
     //TODO Refactor!
     //TODO Add support for adding stuff to environment.
-    public static CommandReturn run(String cmdLine, String command, String wrkDir, String[] addPath,
-                                    Map<String, String> addEnv) {
+    public static FinalTuple<Integer, String> run(String cmdLine, String command, String wrkDir, String[] addPath,
+                                 Map<String, String> addEnv) {
         File workDir = new File(wrkDir);
         workDir.mkdirs();
 
@@ -53,13 +54,13 @@ public final class PCommand {
                 strBuilder.append(System.getProperty("line.separator"));
             }
 
-            return new CommandReturn(strBuilder.toString(), p.exitValue());
+            return new FinalTuple<>(p.exitValue(), strBuilder.toString());
         }
         catch(IOException e) {
             Log.exception(e);
             Log.fatal(-22, "Failure when starting a process!");
         }
 
-        return new CommandReturn("FATAL - COMMAND FAILED", Integer.MIN_VALUE);
+        return new FinalTuple<>(Integer.MIN_VALUE, "FATAL - COMMAND FAILED");
     }
 }
