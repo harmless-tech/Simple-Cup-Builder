@@ -2,6 +2,10 @@ package tech.harmless.simplecupbuilder.cmd;
 
 import lombok.Getter;
 
+/**
+ * Please use Tuple type instead.
+ */
+@Deprecated(forRemoval = true)
 public class CommandReturn {
 
     @Getter

@@ -31,6 +31,7 @@ public final class Log {
         }
     }
 
+    //TODO Change to use CommandReturn.
     public static void process(Object message) {
         out("PROCESS", message);
     }

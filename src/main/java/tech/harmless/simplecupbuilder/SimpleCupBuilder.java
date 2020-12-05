@@ -4,6 +4,7 @@ import com.github.jezza.Toml;
 import com.github.jezza.TomlTable;
 import tech.harmless.simplecupbuilder.cmd.CommandReturn;
 import tech.harmless.simplecupbuilder.cmd.PCommand;
+import tech.harmless.simplecupbuilder.git.GitCommands;
 import tech.harmless.simplecupbuilder.utils.Log;
 
 import java.io.BufferedReader;
@@ -18,21 +19,23 @@ import java.util.HashMap;
  * Add a way to check for new releases.
  *
  * Thread for build manager, builder, wait timer.
- * File metadata for cache file.
+ * File metadata for cache file. (Better yet just have a cache file with a string printed to it to keep track of file "metadata")
  * Multiple cache files.
  * Custom file format and parser (for build files).
  * user interface (console and gui)
  * (op=true) for build command options.
  * Have a web api using micronaut. (Maybe a frontend too)
+ * Add null safety checks.
  */
 public class SimpleCupBuilder {
 
     // Top level directories.
+    //TODO Switch these to File(PATH)?
     public static final String DATA_DIR = "scb/";
     public static final String INTERNAL_DIR = DATA_DIR + ".scb/";
     public static final String CACHE_DIR = INTERNAL_DIR + "cache/";
-    public static final String BUILD_DIR = INTERNAL_DIR + "build/";
-    public static final String ARCHIVES_DIR = INTERNAL_DIR + "archives/";
+    public static final String BUILD_DIR = INTERNAL_DIR + "builds/";
+    public static final String ARCHIVE_DIR = INTERNAL_DIR + "archives/";
     public static final String TMP_DIR = INTERNAL_DIR + "tmp/";
 
     // File extensions.
@@ -79,10 +82,17 @@ public class SimpleCupBuilder {
             Log.process("\n" + cReturn.getOutput());
             Log.process("Exit Code " + cReturn.getExitCode());
 
-            File f = new File("scb/cup.toml");
+            cReturn = PCommand.run("pwsh /c", "git status", CACHE_DIR, new String[0], new HashMap<>());
+
+            Log.process("\n" + cReturn.getOutput());
+            Log.process("Exit Code " + cReturn.getExitCode());
+
+            /*File f = new File(CUP_FILE);
             BufferedReader is = new BufferedReader(new FileReader(f));
             TomlTable table = Toml.from(is);
-            Log.debug(table);
+            Log.debug(table);*/
+
+            GitCommands.commitHash("l");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -95,7 +105,7 @@ public class SimpleCupBuilder {
         new File(INTERNAL_DIR).mkdirs();
         new File(CACHE_DIR).mkdirs();
         new File(BUILD_DIR).mkdirs();
-        new File(ARCHIVES_DIR).mkdirs();
+        new File(ARCHIVE_DIR).mkdirs();
         new File(TMP_DIR).mkdirs();
     }
 }

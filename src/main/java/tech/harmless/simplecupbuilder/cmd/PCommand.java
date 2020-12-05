@@ -15,20 +15,23 @@ import java.util.Map;
 public final class PCommand {
 
     //TODO Better way for cmdLine?
+    //TODO Refactor!
+    //TODO Add support for adding stuff to environment.
     public static CommandReturn run(String cmdLine, String command, String wrkDir, String[] addPath,
                                     Map<String, String> addEnv) {
         File workDir = new File(wrkDir);
         workDir.mkdirs();
 
         List<String> cmd = new ArrayList<>();
-        if(Os.getOs() == Os.EnumOs.WINDOWS)
+        if(Os.getOs() == Os.EnumOs.WINDOWS) //TODO Add support for other OS'.
             cmd.addAll(Arrays.asList(cmdLine.split(" ")));
         cmd.addAll(Arrays.asList(command.split(" ")));
 
         ProcessBuilder builder = new ProcessBuilder(cmd);
         builder.redirectErrorStream(true);
         builder.directory(workDir);
-        builder.environment().putAll(addEnv);
+        if(addEnv != null)
+            builder.environment().putAll(addEnv);
 
         String pathName = Os.getPathName();
         String pathSep = Os.getPathSep();
@@ -57,6 +60,6 @@ public final class PCommand {
             Log.fatal(-22, "Failure when starting a process!");
         }
 
-        return null;
+        return new CommandReturn("FATAL - COMMAND FAILED", Integer.MIN_VALUE);
     }
 }
