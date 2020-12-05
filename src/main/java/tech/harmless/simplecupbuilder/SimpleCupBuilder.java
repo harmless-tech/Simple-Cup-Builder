@@ -2,6 +2,7 @@ package tech.harmless.simplecupbuilder;
 
 import tech.harmless.simplecupbuilder.build.BuildManager;
 import tech.harmless.simplecupbuilder.cmd.GitCommand;
+import tech.harmless.simplecupbuilder.utils.Security;
 import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
 import tech.harmless.simplecupbuilder.utils.Log;
 
@@ -25,6 +26,7 @@ import java.util.Date;
  * (op=true) for build command options.
  * Have a web api using micronaut. (Maybe a frontend too)
  * Add null safety checks.
+ * Javadocs!
  */
 public class SimpleCupBuilder {
 
@@ -130,8 +132,8 @@ public class SimpleCupBuilder {
             TomlTable table = Toml.from(is);
             Log.debug(table);*/
 
-            GitCommand.commitHash("l");
-            GitCommand.commitHash("dddp");
+            //GitCommand.commitHash("l");
+            //GitCommand.commitHash("dddp");
         }
         catch(Exception e) {
             e.printStackTrace();

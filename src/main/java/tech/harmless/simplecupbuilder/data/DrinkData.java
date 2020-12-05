@@ -4,7 +4,6 @@ import lombok.Getter;
 
 import java.util.Map;
 
-//TODO Update this to latest drink file standard.
 public class DrinkData {
 
     // --- drink_info ---
@@ -12,24 +11,29 @@ public class DrinkData {
     protected String drinkInfo_name;
     @Getter
     protected String drinkInfo_id;
-    @Getter
-    protected String drinkInfo_buildFileVersion;
 
     // --- git ---
     @Getter
     protected String git_url;
     @Getter
     protected String git_branch;
+    /**
+     * This option may not be implemented.
+     * This option is considered unsecure and unsupported.
+     */
     @Getter
+    @Deprecated(since = "0.0.1-ALPHA", forRemoval = true)
     protected String git_sshKeyPassword;
-
-    // --- ---
     @Getter
-    protected String internal_build_file;
+    protected String git_internal_build_file;
 
-    // --- export ---
+    // --- archive ---
     @Getter
-    protected String[] export_files;
+    protected String archive_format;
+    @Getter
+    protected long archive_limit;
+    @Getter
+    protected String[] archive_files;
 
     // --- build_ops ---
     @Getter
@@ -37,17 +41,9 @@ public class DrinkData {
     @Getter
     protected boolean buildOps_fullCleanBuild;
     @Getter
-    protected String[] buildOps_CleanBeforeBuild;
-    @Getter
-    protected boolean buildOps_buildWindows;
-    @Getter
-    protected boolean buildOps_buildLinux;
-    @Getter
-    protected boolean buildOps_buildMacos;
+    protected String[] buildOps_removeBeforeBuild;
     @Getter
     protected boolean buildOps_splitBuild;
-    @Getter
-    protected String buildOps_OneOsBuild;
 
     // --- build ---
     @Getter

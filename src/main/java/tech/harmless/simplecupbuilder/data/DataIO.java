@@ -49,7 +49,7 @@ public final class DataIO {
                 Log.error("Cup file does not exist.");
         }
         catch(IOException | ClassCastException e) {
-            Log.error("Failed to import cup.toml and process it.");
+            Log.error("Failed to import " + SimpleCupBuilder.CUP_FILE + " and process it.");
             Log.exception(e);
         }
 
@@ -57,8 +57,26 @@ public final class DataIO {
     }
 
     // Returns drink data and the hash of the file.
-    public static FinalTuple<DrinkData, String> processDrink(String path) {
-        throw new RuntimeException("Not implemented!");
+    public static FinalTuple<DrinkData, String> processDrink(String namePath) {
+        try {
+            DrinkData data = new DrinkData();
+
+            File f = new File(SimpleCupBuilder.DATA_DIR + namePath + SimpleCupBuilder.CONFIG_FILE_EXT);
+            if(f.exists()) {
+                BufferedReader br = new BufferedReader(new FileReader(f));
+                TomlTable root = Toml.from(br);
+
+                // return
+            }
+            else
+                Log.error("Drink file" + namePath + "does not exist.");
+        }
+        catch(IOException | ClassCastException e) {
+            Log.error("Failed to import drink file " + namePath + " and process it.");
+            Log.exception(e);
+        }
+
+        return null;
     }
 
     //TODO This should be called on the builder thread? Sync.

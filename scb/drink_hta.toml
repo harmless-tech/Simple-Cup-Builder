@@ -21,15 +21,11 @@ files = [
 [build_ops]
 wrk_dir = "" # Based off of the git created directory.
 full_clean_build = false
-clean_before_build = [
+remove_before_build = [
 ]
-build_windows = true # Allow building on windows.
-build_linux = true # Allow building on linux.
-build_macos = true # Allow building on macos.
 split_build = true # If this is true then the build cmds are different for every platform.
-single_build = "" # windows, linux, macos. If this is one of these options then the build use use this platform to build other platform builds.
 
-[build]
+[build] # This is only used if spilt_build is false.
 pre_check = [ # These cmds must exit with a code 0 for the build to be started.
 ]
 cmds = [
