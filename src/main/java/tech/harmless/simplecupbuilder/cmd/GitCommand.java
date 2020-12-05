@@ -8,17 +8,35 @@ import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
 //TODO Better error reporting. (EnumStatus)
 public final class GitCommand {
 
-    public static void clone(String id, String url) {
+    public static boolean clone(String id, String url) {
+        throw new RuntimeException("Not Implemented!");
     }
 
-    public static void pull(String id) {
+    public static boolean fetch(String id) {
+        throw new RuntimeException("Not Implemented!");
     }
 
-    public static void status(String id) {
-        //TODO Run git status and check for the 'nothing to commit, working tree clean' message.
+    public static boolean checkout(String id, String branch) {
+        throw new RuntimeException("Not Implemented!");
     }
 
-    //TODO More verbose reason for failing.
+    public static boolean pull(String id, String branch) {
+        throw new RuntimeException("Not Implemented!");
+    }
+
+    public static boolean needsPull(String id) {
+        //TODO This should check for the words "Your branch is behind".
+
+        if(id != null) {
+            boolean f = fetch(id); // Do we really care about the return value?
+
+            throw new RuntimeException("Not Implemented!");
+        }
+
+        return false;
+    }
+
+    //TODO More verbose reason for failing? Or is logging it enough.
     public static String commitHash(String id) {
         if(id != null) {
             FinalTuple<Integer, String> cReturn = ProcessCommand.run("pwsh /c",

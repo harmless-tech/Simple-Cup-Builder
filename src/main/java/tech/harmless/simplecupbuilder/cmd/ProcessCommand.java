@@ -18,14 +18,13 @@ public final class ProcessCommand {
 
     //TODO Better way for cmdLine?
     //TODO Refactor!
-    //TODO Add support for adding stuff to environment.
     public static FinalTuple<Integer, String> run(String cmdLine, String command, String wrkDir, String[] addPath,
                                  Map<String, String> addEnv) {
         File workDir = new File(wrkDir);
         workDir.mkdirs();
 
         List<String> cmd = new ArrayList<>();
-        if(Os.getOs() == Os.EnumOs.WINDOWS) //TODO Add support for other OS'.
+        if(Os.getOs() == Os.EnumOs.WINDOWS) //TODO Add support for other OS shells.
             cmd.addAll(Arrays.asList(cmdLine.split(" ")));
         cmd.addAll(Arrays.asList(command.split(" ")));
 
