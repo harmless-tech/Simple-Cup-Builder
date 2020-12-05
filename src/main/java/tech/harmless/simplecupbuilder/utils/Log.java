@@ -2,7 +2,6 @@ package tech.harmless.simplecupbuilder.utils;
 
 import tech.harmless.simplecupbuilder.SimpleCupBuilder;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
@@ -17,14 +16,11 @@ public final class Log {
 
     static {
         try {
-            String dir = SimpleCupBuilder.INTERNAL_DIR;
-            //new File(dir).mkdirs(); TODO All "top" dirs are created at the start.
-
-            outStream = new PrintStream(new File(dir + "scb.log"));
+            outStream = new PrintStream(SimpleCupBuilder.LOG_FILE);
             outStream.println("Out logging init at " + new Date() + ".");
             outStream.flush();
 
-            errStream = new PrintStream(new File(dir + "scb-err.log"));
+            errStream = new PrintStream(SimpleCupBuilder.LOG_ERR_FILE);
             errStream.println("Err logging init at " + new Date() + ".");
             errStream.flush();
         }

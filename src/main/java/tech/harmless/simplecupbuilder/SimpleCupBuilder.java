@@ -23,6 +23,7 @@ import java.util.HashMap;
  * Custom file format and parser (for build files).
  * user interface (console and gui)
  * (op=true) for build command options.
+ * Have a web api using micronaut. (Maybe a frontend too)
  */
 public class SimpleCupBuilder {
 
@@ -37,8 +38,13 @@ public class SimpleCupBuilder {
     // File extensions.
     public static final String CONFIG_FILE_EXT = ".toml";
     public static final String CACHE_FILE_EXT = ".cache";
+    public static final String LOG_FILE_EXT = ".log";
+
+    // File prefixes.
 
     // Files.
+    public static final String LOG_FILE = INTERNAL_DIR + "scb" + LOG_FILE_EXT;
+    public static final String LOG_ERR_FILE = INTERNAL_DIR + "scb-err" + LOG_FILE_EXT;
     public static final String CUP_FILE = DATA_DIR + "cup" + CONFIG_FILE_EXT;
 
     // Dynamic options.
@@ -86,7 +92,10 @@ public class SimpleCupBuilder {
 
     private static void createDirs() {
         new File(DATA_DIR).mkdirs();
+        new File(INTERNAL_DIR).mkdirs();
         new File(CACHE_DIR).mkdirs();
+        new File(BUILD_DIR).mkdirs();
+        new File(ARCHIVES_DIR).mkdirs();
         new File(TMP_DIR).mkdirs();
     }
 }
