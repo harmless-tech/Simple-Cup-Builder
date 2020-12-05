@@ -9,10 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-//TODO Make synced.
-//TODO Add null checks.
 public final class Log {
 
+    private static final Object syncObj = new Object();
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSSS", Locale.ENGLISH);
     private static PrintStream outStream;
     private static PrintStream errStream;
@@ -35,41 +34,55 @@ public final class Log {
     }
 
     public static void process(String processName, FinalTuple<Integer, String> cmd) {
+        if(processName == null || cmd == null)
+            return;
+
         String str = "\nProcess " + processName + " exited with exit code " + cmd.getX() + ".\n" + cmd.getY() + "\n";
         out("PROCESS", str);
     }
 
     public static void info(Object message) {
+        if(message == null)
+            return;
+
         out("INFO", message);
     }
 
     public static void warn(Object message) {
+        if(message == null)
+            return;
+
         out("WARN", message);
     }
 
     public static void debug(Object message) {
-        if(!SimpleCupBuilder.DEBUG)
+        if(message == null || !SimpleCupBuilder.DEBUG)
             return;
 
         out("DEBUG", message);
     }
 
     public static void trace(Object caller, Object message) {
-        if(!SimpleCupBuilder.DEBUG)
+        if(message == null || !SimpleCupBuilder.DEBUG)
             return;
 
         out("TRACE", "Message from " + caller + ": " + message);
     }
 
     public static void error(Object message) {
+        if(message == null)
+            return;
+
         err("ERROR", message);
     }
 
     public static void exception(Exception e) {
-        e.printStackTrace();
-        e.printStackTrace(errStream);
+        synchronized(syncObj) {
+            e.printStackTrace();
+            e.printStackTrace(errStream);
 
-        errStream.flush();
+            errStream.flush();
+        }
     }
 
     public static void fatal(int code, Object message) {
@@ -82,17 +95,27 @@ public final class Log {
     }
 
     public static void print(Object message) {
-        System.out.println(message);
+        if(message == null)
+            return;
 
-        outStream.println(message);
-        outStream.flush();
+        synchronized(syncObj) {
+            System.out.println(message);
+
+            outStream.println(message);
+            outStream.flush();
+        }
     }
 
     public static void printErr(Object message) {
-        System.err.println(message);
+        if(message == null)
+            return;
 
-        errStream.println(message);
-        errStream.flush();
+        synchronized(syncObj) {
+            System.err.println(message);
+
+            errStream.println(message);
+            errStream.flush();
+        }
     }
 
     private static void out(String header, Object message) {
