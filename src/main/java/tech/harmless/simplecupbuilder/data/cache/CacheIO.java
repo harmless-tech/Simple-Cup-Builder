@@ -9,6 +9,7 @@ public final class CacheIO {
 
     public static final Object syncObj = new Object(); // Must sync with this object when accessing cache.
     public static final HashMap<String, CacheData> cache = new HashMap<>();
+    public static final int cacheVersion = 1;
 
     private static final String[] emptyStrArray = new String[0];
 

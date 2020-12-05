@@ -1,5 +1,5 @@
 # DrinkData: Example drink config file.
-#TODO Change to custom build file.
+#TODO Change to custom build file format.
 
 [drink_info]
 name = "Simple Script Prototype Drink"
@@ -15,6 +15,12 @@ internal_build_file = "NULL" # Uses the build file in the git project. If this o
 
 [export]
 files = [ # Files to be moved to storage.
+]
+
+[archive]
+format = "zip" # zip or folder
+limit = 5
+files = [
 ]
 
 [build_ops]

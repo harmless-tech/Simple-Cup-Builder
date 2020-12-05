@@ -3,7 +3,7 @@
 [drink_info]
 name = "Simple Cup Builder"
 id = "scbd" # Drink ids cannot conflict.
-build_file_version = "1"
+#build_file_version = "1"
 
 [git]
 url = ""

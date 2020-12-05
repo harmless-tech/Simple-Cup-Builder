@@ -34,10 +34,14 @@ public class SimpleCupBuilder {
 
     // File extensions.
     public static final String CONFIG_FILE_EXT = ".toml";
-    public static final String CACHE_FILE_EXT = ".cache";
     public static final String LOG_FILE_EXT = ".log";
+    public static final String CACHE_FILE_EXT = ".cache";
+    public static final String META_FILE_EXT = ".metadata"; // Used to keep track of cache info. (Cache version)
+    public static final String HASH_FILE_EXT = ".hash";
+    public static final String COMPRESSED_FILE_EXT = ".zip";
 
     // File prefixes.
+    public static final String ARCHIVE_FILE_PREFIX = "archive-";
 
     // Files.
     public static final String LOG_FILE = INTERNAL_DIR + "scb" + LOG_FILE_EXT;
@@ -83,7 +87,7 @@ public class SimpleCupBuilder {
         //TODO Testing.
         try {
             //FinalTuple<Integer, String> cReturn =
-                   //ProcessCommand.run("pwsh /c", "rustc --version", CACHE_DIR, new String[0], new HashMap<>());
+            //ProcessCommand.run("pwsh /c", "rustc --version", CACHE_DIR, new String[0], new HashMap<>());
 
             //Log.process("\n" + cReturn.getY());
             //Log.process("Exit Code " + cReturn.getX());
