@@ -16,7 +16,7 @@ import java.util.Date;
  * Delete tmp directory on exit?
  * Add a way to check for new releases.
  *
- * Thread for build manager, builder, wait timer.
+ * jPackage support. (Would be nice)
  * File metadata for cache file. (Better yet just have a cache file with a string printed to it to keep track of file "metadata")
  * Multiple cache files.
  * Custom file format and parser (for build files). (Maybe switch to ini instead.)

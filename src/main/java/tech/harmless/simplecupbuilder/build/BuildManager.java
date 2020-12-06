@@ -1,6 +1,7 @@
 package tech.harmless.simplecupbuilder.build;
 
 import tech.harmless.simplecupbuilder.cmd.GitCommand;
+import tech.harmless.simplecupbuilder.cmd.ProcessCommand;
 import tech.harmless.simplecupbuilder.data.CupData;
 import tech.harmless.simplecupbuilder.data.DataIO;
 import tech.harmless.simplecupbuilder.data.DrinkData;
@@ -10,7 +11,6 @@ import tech.harmless.simplecupbuilder.utils.Log;
 import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -184,7 +184,7 @@ public class BuildManager implements Runnable {
         Log.info("Checking for repo updates... Done!");
 
         // Internal build files.
-        //TODO Check internal drink file hash and compare to see if it should be updated.
+        //TODO Check internal drink file hash and compare to see if it should be updated?
         Log.info("Updating internal build files...");
         for(String id : updatedRepos) {
             synchronized(buildSync) {
@@ -195,7 +195,27 @@ public class BuildManager implements Runnable {
         }
         Log.info("Updating internal build files... Done!");
 
-        //
+        // Build!
+        //TODO More build threads?
+        for(String id : updatedRepos) {
+            Thread thread = new Thread(null, () -> startBuild(id), "Build Thread");
+
+            synchronized(buildSync) {
+                buildThreads.add(thread);
+            }
+
+            thread.start();
+            try {
+                thread.join();
+            }
+            catch(InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            synchronized(buildSync) {
+                buildThreads.remove(thread);
+            }
+        }
     }
 
     // Also checks for repos that don't exist yet.
@@ -276,5 +296,73 @@ public class BuildManager implements Runnable {
         }
 
         return r;
+    }
+
+    private void startBuild(String id) {
+        DrinkData drink;
+        synchronized(buildSync) {
+            drink = drinks.get(id);
+        }
+
+        //TODO Allow for removal.
+        //TODO Allow for specific builds. (Switch statement for platforms) (Same for path) (Some for process)
+
+        // Pre-Check
+        boolean preCheck = true;
+        for(String cmd : drink.getBuild_preCheck()) {
+            //TODO Allow add path for all platforms.
+            FinalTuple<Integer, String> pr = ProcessCommand
+                    .run(cupData.getProcess_windows(), cmd, drink.getBuildOps_wrkDir(), drink.getAddPath_windows(),
+                            null);
+            Log.process("Drink pre-check cmd: " + cmd, pr);
+
+            preCheck = preCheck && pr.getX() == 0;
+            if(!preCheck)
+                break;
+        }
+
+        // Main
+        if(preCheck) {
+            // Build
+            boolean built = true;
+            for(String cmd : drink.getBuild_commands()) {
+                //TODO Allow add path for all platforms.
+                FinalTuple<Integer, String> pr = ProcessCommand
+                        .run(cupData.getProcess_windows(), cmd, drink.getBuildOps_wrkDir(), drink.getAddPath_windows(),
+                                null);
+                Log.process("Drink build cmd: " + cmd, pr);
+
+                built = built && pr.getX() == 0;
+                if(!built)
+                    break;
+            }
+
+            if(built) {
+                // Test
+                boolean testing = true;
+                for(String cmd : drink.getBuild_testCommands()) {
+                    //TODO Allow add path for all platforms.
+                    FinalTuple<Integer, String> pr = ProcessCommand
+                            .run(cupData.getProcess_windows(), cmd, drink.getBuildOps_wrkDir(), drink.getAddPath_windows(),
+                                    null);
+                    Log.process("Drink test cmd: " + cmd, pr);
+
+                    testing = testing && pr.getX() == 0;
+                    if(!testing)
+                        break;
+                }
+
+                if(testing) {
+                    // Archive
+                    //TODO Allow for archiving.
+                }
+                else
+                    Log.error("Testing failed, skipping archival!");
+            }
+            else
+                Log.error("Build failed, skipping testing!");
+        }
+        else
+            Log.error("Pre-Check failed, skipping build!");
     }
 }
