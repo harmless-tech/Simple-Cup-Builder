@@ -1,5 +1,6 @@
 package tech.harmless.simplecupbuilder.build;
 
+import tech.harmless.simplecupbuilder.cmd.GitCommand;
 import tech.harmless.simplecupbuilder.data.CupData;
 import tech.harmless.simplecupbuilder.data.DataIO;
 import tech.harmless.simplecupbuilder.data.DrinkData;
@@ -9,6 +10,7 @@ import tech.harmless.simplecupbuilder.utils.Log;
 import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -77,8 +79,10 @@ public class BuildManager implements Runnable {
         }, cupData.getOptions_gitUpdateTimer() * 60, cupData.getOptions_gitUpdateTimer() * 60, TimeUnit.SECONDS);
 
         while(shouldRun) {
+            // Console
             //TODO Process console data.
 
+            // Build
             if((buildStartTime.getTime() + cupData.getOptions_gitUpdateTimer() * 60 * 1000) <= new Date().getTime()) {
                 Log.info("Timer done. Checking if build need to be done.");
                 Log.warn("Some console commands may be slow to process until builds are done.");
@@ -96,9 +100,9 @@ public class BuildManager implements Runnable {
                 //TODO If builds are occurring still skip.
             }
 
+            // Wait until this thread is notified of a change.
             synchronized(monitorObject) {
                 while(!signaled) {
-                    Log.debug("waiting");
                     try {
                         monitorObject.wait();
                     }
@@ -116,6 +120,7 @@ public class BuildManager implements Runnable {
         //TODO Stop all other build threads. thread.interr Then wait.
     }
 
+    // No need to sync, since there is only one thread so far.
     private void importData() {
         //TODO Import Cache.
         //CacheIO.importCache();
@@ -163,13 +168,98 @@ public class BuildManager implements Runnable {
             Log.info("Drink " + id + " was removed from the cache.");
     }
 
+    private String[] allDrinkIds() {
+        String[] r = EmptyTypes.STRING_ARRAY;
+        synchronized(buildSync) {
+            r = drinks.keySet().toArray(EmptyTypes.STRING_ARRAY);
+        }
+        return r;
+    }
+
     private void build() {
-        Log.debug("starty");
-        try {
-            Thread.sleep(10000);
+        // Check
+        String[] updatedRepos = checkForUpdatesAndCreate();
+
+        //TODO Internal build files.
+    }
+
+    // Also checks for repos that don't exist yet.
+    private String[] checkForUpdatesAndCreate() {
+        String[] drinkIds = allDrinkIds();
+        boolean[] drinkTags = new boolean[drinkIds.length];
+
+        // Check for not yet downloaded repos.
+        for(int i = 0; i < drinkIds.length; i++) {
+            if(!GitCommand.status(drinkIds[i])) {
+                Log.info("Drink " + drinkIds[i] + " does not have a downloaded repo. It will be downloaded now.");
+
+                String url;
+                String branch;
+                synchronized(buildSync) {
+                    url = drinks.get(drinkIds[i]).getGit_url();
+                    branch = drinks.get(drinkIds[i]).getGit_branch();
+                }
+
+                if(GitCommand.clone(drinkIds[i], url))
+                    if(GitCommand.checkout(drinkIds[i], branch)) {
+                        Log.info("Downloaded repo for drink " + drinkIds[i] + ".");
+                        drinkTags[i] = true;
+
+                        String commit = GitCommand.commitHash(drinkIds[i]);
+                        CacheIO.setDrinkCommitHash(drinkIds[i], commit);
+                    }
+                    else
+                        Log.error("Could not switch branch to " + branch + " for drink " + drinkIds[i] + ".");
+                else
+                    Log.error("Could not clone repo for drink " + drinkIds[i] + ".");
+            }
         }
-        catch(InterruptedException e) {
-            e.printStackTrace();
+
+        // Fetch, compare, and pull already downloaded repos.
+        //TODO Should do git checkout?
+        for(int i = 0; i < drinkIds.length; i++) {
+            if(!drinkTags[i]) {
+                if(GitCommand.fetch(drinkIds[i])) {
+                    String commit = GitCommand.commitHash(drinkIds[i]);
+
+                    if(!commit.equals(CacheIO.getDrinkCommitHash(drinkIds[i]))) {
+                        // pull then mark for build.
+                        String branch;
+                        synchronized(buildSync) {
+                            branch = drinks.get(drinkIds[i]).getGit_branch();
+                        }
+
+                        if(GitCommand.pull(drinkIds[i], branch)) {
+                            Log.info("Pulled repo for drink " + drinkIds[i] + ".");
+                            drinkTags[i] = true;
+
+                            commit = GitCommand.commitHash(drinkIds[i]);
+                            CacheIO.setDrinkCommitHash(drinkIds[i], commit);
+                        }
+                        else
+                            Log.error("Could not pull repo for drink " + drinkIds[i] + ".");
+                    }
+                }
+                else
+                    Log.error("Could not fetch repo for drink " + drinkIds[i] + ".");
+            }
         }
+
+        int count = 0;
+        for(boolean val : drinkTags) {
+            if(val)
+                count++;
+        }
+
+        String[] r = new String[count];
+        int ri = 0;
+        for(int i = 0; i < drinkIds.length; i++) {
+            if(drinkTags[i]) {
+                r[ri] = drinkIds[i];
+                ri++;
+            }
+        }
+
+        return r;
     }
 }
