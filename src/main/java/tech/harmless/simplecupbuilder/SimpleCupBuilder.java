@@ -24,7 +24,7 @@ import java.util.Date;
  * (op=true) for build command options.
  * Have a web api using micronaut. (Maybe a frontend too)
  * Add null safety checks.
- * Javadocs!
+ * Javadocs! and comments!
  * Use mongodb to store data and build logs.
  * Custom jar api to allow for jars to be dynamically loaded for special build processes.
  */

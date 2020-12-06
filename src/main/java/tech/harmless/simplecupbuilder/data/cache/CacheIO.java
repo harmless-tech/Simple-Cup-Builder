@@ -39,7 +39,6 @@ public final class CacheIO {
         }
     }
 
-    //TODO Maybe this should prune and setup cache.
     public static String[] prune(String[] ids) {
         if(ids.length > 0) {
             List<String> removeList = new ArrayList<>();
@@ -64,7 +63,6 @@ public final class CacheIO {
         return EmptyTypes.STRING_ARRAY;
     }
 
-    //TODO Add drink file hashes.
     public static void setDrinkFileHash(String id, String hash) {
         if(id != null && hash != null) {
             synchronized(syncObj) {
