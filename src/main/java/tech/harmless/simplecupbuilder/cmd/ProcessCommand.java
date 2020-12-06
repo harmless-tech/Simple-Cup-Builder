@@ -1,8 +1,8 @@
 package tech.harmless.simplecupbuilder.cmd;
 
-import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
 import tech.harmless.simplecupbuilder.utils.Log;
 import tech.harmless.simplecupbuilder.utils.OS;
+import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
 import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
 
 import java.io.BufferedReader;

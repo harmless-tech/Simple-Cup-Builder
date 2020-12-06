@@ -10,6 +10,7 @@ public final class Security {
 
     /**
      * Uses the SHA-256 algorithm in a unsecured way to generate a hash for comparison purposes.
+     *
      * @param input A {@code String} that is used to generate the hash.
      * @return A {@code String} that is the hashed version of the input.
      */
@@ -29,6 +30,7 @@ public final class Security {
     /**
      * Uses the SHA-512 algorithm in a unsecured way to generate a hash for comparison purposes.
      * Fallbacks to the SHA-256 algorithm if SHA-512 is not found.
+     *
      * @param input A {@code String} that is used to generate the hash.
      * @return A {@code String} that is the hashed version of the input.
      */

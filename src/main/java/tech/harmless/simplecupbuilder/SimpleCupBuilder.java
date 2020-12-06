@@ -31,7 +31,6 @@ import java.util.Date;
 public class SimpleCupBuilder {
 
     // Top level directories.
-    //TODO Switch these to File(PATH)?
     public static final String DATA_DIR = "scb/";
     public static final String INTERNAL_DIR = DATA_DIR + ".scb/";
     public static final String CACHE_DIR = INTERNAL_DIR + "cache/";
@@ -86,11 +85,11 @@ public class SimpleCupBuilder {
             System.exit(EnumExitCodes.LOCK_SETUP_FAILURE);
         }
 
-
         // After
         Log.info("Name: " + BuildConfig.NAME + ", Version: " + BuildConfig.VERSION +
                 ", Author: " + BuildConfig.AUTHOR_NAME + ", Build Time: " + BuildConfig.BUILD_TIME);
 
+        //TODO Move this to own method?
         for(String arg : args) {
             switch(arg) {
                 case "--debug" -> {
@@ -106,10 +105,8 @@ public class SimpleCupBuilder {
         BuildManager buildManager = new BuildManager();
         // CONSOLE
 
-        ThreadGroup threadGroup = new ThreadGroup("Main Processes");
-
-        Thread buildManagerThread = new Thread(threadGroup, buildManager, "Build Manager Thread");
-        Thread consoleThread = new Thread(threadGroup, null, "Console Thread");
+        Thread buildManagerThread = new Thread(null, buildManager, "Build Manager Thread");
+        Thread consoleThread = new Thread(null, null, "Console Thread");
 
         buildManagerThread.start();
         consoleThread.start(); //TODO Allow user input.
@@ -140,9 +137,6 @@ public class SimpleCupBuilder {
         }
         //
 
-        //TODO Start BuildManager Thread.
-        //TODO Start Console input Thread.
-
         // End
         try {
             buildManagerThread.join();
@@ -155,9 +149,7 @@ public class SimpleCupBuilder {
         Log.info(BuildConfig.NAME + " closing...");
 
         try {
-            if(lock != null)
-                lock.close();
-
+            lock.close();
             instanceLock.close();
         }
         catch(IOException e) {

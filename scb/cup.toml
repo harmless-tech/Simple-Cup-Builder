@@ -1,7 +1,7 @@
 # CupData: Example cup config file.
 
 [options]
-git_update_timer = 15 # In minutes.
+git_update_timer = 1 # In minutes.
 parallel_builds = false # This could break certin build processes. Could also overwhelm stuff. #TODO Implement!
 drinks = [
     "drink_hta",
