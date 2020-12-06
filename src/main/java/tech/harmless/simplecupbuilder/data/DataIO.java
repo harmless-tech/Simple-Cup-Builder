@@ -14,9 +14,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+//TODO Less dup.
 public final class DataIO {
 
-    //TODO Cup data does not need to be hashed? But should it?
     @SuppressWarnings("Duplicates")
     public static CupData processCup() {
         try {
@@ -173,9 +173,141 @@ public final class DataIO {
         return null;
     }
 
-    //TODO This should be called on the builder thread? Sync.
+    @SuppressWarnings("Duplicates")
     public static FinalTuple<DrinkData, String> processInternalDrink(DrinkData drink) {
-        //TODO Allow for internal build file processing.
-        throw new RuntimeException("Not implemented!");
+        try {
+            DrinkData data = new DrinkData();
+
+            File f = new File(
+                    SimpleCupBuilder.BUILD_DIR + drink.getGit_internal_build_file() + SimpleCupBuilder.CONFIG_FILE_EXT);
+            if(f.exists()) {
+                // Drink Data
+                BufferedReader br = new BufferedReader(new FileReader(f));
+                TomlTable root = Toml.from(br);
+
+                data.archive_format = (String) root.getOrDefault("archive.format", "zip");
+                data.archive_limit = (long) root.getOrDefault("archive.limit", 5L);
+                data.archive_files =
+                        ((TomlArray) root.getOrDefault("archive.files", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+
+                data.buildOps_wrkDir = (String) root.getOrDefault("build_ops.wrk_dir", EmptyTypes.STRING);
+                data.buildOps_fullCleanBuild = (boolean) root.getOrDefault("build_ops.full_clean_build", false);
+                data.buildOps_removeBeforeBuild =
+                        ((TomlArray) root.getOrDefault("build_ops.remove_before_build", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+                data.buildOps_splitBuild = (boolean) root.getOrDefault("build_ops.split_build", true);
+
+                data.build_preCheck =
+                        ((TomlArray) root.getOrDefault("build.pre_check", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+                data.build_commands =
+                        ((TomlArray) root.getOrDefault("build.cmds", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+                data.build_testCommands =
+                        ((TomlArray) root.getOrDefault("build.test_cmds", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+
+                data.buildWindows_preCheck =
+                        ((TomlArray) root.getOrDefault("build_windows.pre_check", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+                data.buildWindows_commands =
+                        ((TomlArray) root.getOrDefault("build_windows.cmds", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+                data.buildWindows_testCommands =
+                        ((TomlArray) root.getOrDefault("build_windows.test_cmds", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+
+                data.buildLinux_preCheck =
+                        ((TomlArray) root.getOrDefault("build_linux.pre_check", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+                data.buildLinux_commands =
+                        ((TomlArray) root.getOrDefault("build_linux.cmds", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+                data.buildLinux_testCommands =
+                        ((TomlArray) root.getOrDefault("build_linux.test_cmds", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+
+                data.buildMacOS_preCheck =
+                        ((TomlArray) root.getOrDefault("build_macos.pre_check", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+                data.buildMacOS_commands =
+                        ((TomlArray) root.getOrDefault("build_macos.cmds", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+                data.buildMacOS_testCommands =
+                        ((TomlArray) root.getOrDefault("build_macos.test_cmds", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+
+                data.addPath_windows =
+                        ((TomlArray) root.getOrDefault("add_path.windows", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+                data.addPath_linux =
+                        ((TomlArray) root.getOrDefault("add_path.linux", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+                data.addPath_macos =
+                        ((TomlArray) root.getOrDefault("add_path.macos", EmptyTypes.TOML_ARRAY))
+                                .toArray(EmptyTypes.STRING_ARRAY);
+
+                //TODO Environment.
+                data.envMap = null;
+                //TODO Alias.
+                data.aliasMap = null;
+
+                // Hash
+                br = new BufferedReader(new FileReader(f));
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while((line = br.readLine()) != null)
+                    sb.append(line);
+
+                String hash = Security.unsecureSha512(sb.toString());
+
+                // Move data vars to drink.
+                drink.archive_format = data.archive_format;
+                drink.archive_limit = data.archive_limit;
+                drink.archive_files = data.archive_files;
+
+                drink.buildOps_wrkDir = data.buildOps_wrkDir;
+                drink.buildOps_fullCleanBuild = data.buildOps_fullCleanBuild;
+                drink.buildOps_removeBeforeBuild = data.buildOps_removeBeforeBuild;
+                drink.buildOps_splitBuild = data.buildOps_splitBuild;
+
+                drink.build_preCheck = data.build_preCheck;
+                drink.build_commands = data.build_commands;
+                drink.build_testCommands = data.build_testCommands;
+
+                drink.buildWindows_preCheck = data.buildWindows_preCheck;
+                drink.buildWindows_commands = data.buildWindows_commands;
+                drink.buildWindows_testCommands = data.buildWindows_testCommands;
+
+                drink.buildLinux_preCheck = data.buildLinux_preCheck;
+                drink.buildLinux_commands = data.buildLinux_commands;
+                drink.buildLinux_testCommands = data.buildLinux_testCommands;
+
+                drink.buildMacOS_preCheck = data.buildMacOS_preCheck;
+                drink.buildMacOS_commands = data.buildMacOS_commands;
+                drink.buildMacOS_testCommands = data.buildMacOS_testCommands;
+
+                drink.addPath_windows = data.addPath_windows;
+                drink.addPath_linux = data.addPath_linux;
+                drink.addPath_macos = data.addPath_macos;
+
+                //TODO Environment.
+                drink.envMap = null;
+                //TODO Alias.
+                data.aliasMap = null;
+
+                return new FinalTuple<>(drink, hash);
+            }
+            else
+                Log.error("Drink file" + drink.getGit_internal_build_file() + "does not exist.");
+        }
+        catch(IOException | ClassCastException e) {
+            Log.error("Failed to import internal drink file " + drink.getGit_internal_build_file() + " and process it.");
+            Log.exception(e);
+        }
+
+        return null;
     }
 }

@@ -9,7 +9,6 @@ id = "htad" # Drink ids cannot conflict.
 [git]
 url = ""
 branch = "master"
-ssh_key_password = "" #TODO Implement! Do not use this option!
 internal_build_file = "" # Uses a build file in the git project. If this option is used all options below this are ignored.
 
 [archive]
