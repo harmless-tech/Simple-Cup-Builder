@@ -189,7 +189,7 @@ public class BuildManager implements Runnable {
         for(String id : updatedRepos) {
             synchronized(buildSync) {
                 DrinkData drink = drinks.get(id);
-                if(drink.getGit_internal_build_file().isEmpty())
+                if(!drink.getGit_internal_build_file().isEmpty())
                     DataIO.processInternalDrink(drink);
             }
         }
@@ -299,6 +299,8 @@ public class BuildManager implements Runnable {
     }
 
     private void startBuild(String id) {
+        Log.info("Starting build of drink " + id + "...");
+
         DrinkData drink;
         synchronized(buildSync) {
             drink = drinks.get(id);
@@ -364,5 +366,7 @@ public class BuildManager implements Runnable {
         }
         else
             Log.error("Pre-Check failed, skipping build!");
+
+        Log.info("Starting build of drink " + id + "... Done!");
     }
 }

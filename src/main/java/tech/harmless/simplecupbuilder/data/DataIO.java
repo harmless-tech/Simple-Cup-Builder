@@ -163,7 +163,7 @@ public final class DataIO {
                 return new FinalTuple<>(data, hash);
             }
             else
-                Log.error("Drink file" + namePath + "does not exist.");
+                Log.error("Drink file " + namePath + " does not exist.");
         }
         catch(IOException | ClassCastException e) {
             Log.error("Failed to import drink file " + namePath + " and process it.");
@@ -301,7 +301,7 @@ public final class DataIO {
                 return new FinalTuple<>(drink, hash);
             }
             else
-                Log.error("Drink file" + drink.getGit_internal_build_file() + "does not exist.");
+                Log.error("Drink file " + drink.getGit_internal_build_file() + " does not exist.");
         }
         catch(IOException | ClassCastException e) {
             Log.error("Failed to import internal drink file " + drink.getGit_internal_build_file() + " and process it.");
