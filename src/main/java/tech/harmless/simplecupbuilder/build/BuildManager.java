@@ -1,5 +1,6 @@
 package tech.harmless.simplecupbuilder.build;
 
+import tech.harmless.simplecupbuilder.SimpleCupBuilder;
 import tech.harmless.simplecupbuilder.cmd.GitCommand;
 import tech.harmless.simplecupbuilder.cmd.ProcessCommand;
 import tech.harmless.simplecupbuilder.data.CupData;
@@ -259,16 +260,15 @@ public class BuildManager implements Runnable {
         for(int i = 0; i < drinkIds.length; i++) {
             if(!drinkTags[i]) {
                 if(GitCommand.fetch(drinkIds[i])) {
-                    String commit = GitCommand.commitHash(drinkIds[i]);
+                    String branch;
+                    synchronized(buildSync) {
+                        branch = drinks.get(drinkIds[i]).getGit_branch();
+                    }
 
-                    if(!commit.equals(CacheIO.getDrinkCommitHash(drinkIds[i]))) {
-                        // pull then mark for build.
-                        String branch;
-                        synchronized(buildSync) {
-                            branch = drinks.get(drinkIds[i]).getGit_branch();
-                        }
+                    if(GitCommand.pull(drinkIds[i], branch)) {
+                        String commit = GitCommand.commitHash(drinkIds[i]);
 
-                        if(GitCommand.pull(drinkIds[i], branch)) {
+                        if(!commit.equals(CacheIO.getDrinkCommitHash(drinkIds[i]))) {
                             if(GitCommand.submoduleInit(drinkIds[i])) {
                                 Log.info("Pulled repo for drink " + drinkIds[i] + ".");
                                 drinkTags[i] = true;
@@ -279,9 +279,9 @@ public class BuildManager implements Runnable {
                             else
                                 Log.error("Could not init submodules for drink " + drinkIds[i] + ".");
                         }
-                        else
-                            Log.error("Could not pull repo for drink " + drinkIds[i] + ".");
                     }
+                    else
+                        Log.error("Could not pull repo for drink " + drinkIds[i] + ".");
                 }
                 else
                     Log.error("Could not fetch repo for drink " + drinkIds[i] + ".");
@@ -322,7 +322,8 @@ public class BuildManager implements Runnable {
         for(String cmd : drink.getBuildWindows_preCheck()) {
             //TODO Allow add path for all platforms.
             FinalTuple<Integer, String> pr = ProcessCommand
-                    .run(cupData.getProcess_windows(), cmd, drink.getBuildOps_wrkDir(), drink.getAddPath_windows(),
+                    .run(cupData.getProcess_windows(), cmd,
+                            SimpleCupBuilder.BUILD_DIR + id + drink.getBuildOps_wrkDir(), drink.getAddPath_windows(),
                             null);
             Log.process("Drink pre-check cmd: " + cmd, pr);
 
@@ -338,7 +339,9 @@ public class BuildManager implements Runnable {
             for(String cmd : drink.getBuildWindows_commands()) {
                 //TODO Allow add path for all platforms.
                 FinalTuple<Integer, String> pr = ProcessCommand
-                        .run(cupData.getProcess_windows(), cmd, drink.getBuildOps_wrkDir(), drink.getAddPath_windows(),
+                        .run(cupData.getProcess_windows(), cmd,
+                                SimpleCupBuilder.BUILD_DIR + id + drink.getBuildOps_wrkDir(),
+                                drink.getAddPath_windows(),
                                 null);
                 Log.process("Drink build cmd: " + cmd, pr);
 
@@ -353,7 +356,8 @@ public class BuildManager implements Runnable {
                 for(String cmd : drink.getBuildWindows_testCommands()) {
                     //TODO Allow add path for all platforms.
                     FinalTuple<Integer, String> pr = ProcessCommand
-                            .run(cupData.getProcess_windows(), cmd, drink.getBuildOps_wrkDir(),
+                            .run(cupData.getProcess_windows(), cmd,
+                                    SimpleCupBuilder.BUILD_DIR + id + drink.getBuildOps_wrkDir(),
                                     drink.getAddPath_windows(),
                                     null);
                     Log.process("Drink test cmd: " + cmd, pr);

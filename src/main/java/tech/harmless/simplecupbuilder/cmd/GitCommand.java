@@ -57,7 +57,7 @@ public final class GitCommand {
                     "git fetch", SimpleCupBuilder.BUILD_DIR + id,
                     EmptyTypes.STRING_ARRAY, null);
 
-            Log.process("Git Clone", cReturn);
+            Log.process("Git Fetch", cReturn);
 
             return cReturn.getX() == 0;
         }

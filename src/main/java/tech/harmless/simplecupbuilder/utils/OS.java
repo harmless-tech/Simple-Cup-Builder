@@ -28,13 +28,4 @@ public final class OS {
 
         return "PATH";
     }
-
-    public static String getPathSep() {
-        EnumOS os = getOs();
-
-        if(os == EnumOS.WINDOWS)
-            return ";";
-
-        return ":";
-    }
 }

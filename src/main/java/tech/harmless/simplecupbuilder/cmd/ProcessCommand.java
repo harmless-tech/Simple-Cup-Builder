@@ -29,6 +29,13 @@ public final class ProcessCommand {
         File workDir = new File(wrkDir);
         workDir.mkdirs();
 
+        /*if(command.startsWith(".") || command.startsWith("/") || command.startsWith("\\")) {
+            if(command.startsWith("."))
+                command = command.substring(1);
+
+            command = workDir.getAbsolutePath().substring(0, workDir.getAbsolutePath().length() - 2) + command;
+        }*/
+
         List<String> cmd = new ArrayList<>();
         if(OS.getOs() == OS.EnumOS.WINDOWS) //TODO Add support for other OS shells.
             cmd.addAll(Arrays.asList(cmdLine.split(" ")));
@@ -41,11 +48,10 @@ public final class ProcessCommand {
             builder.environment().putAll(addEnv);
 
         String pathName = OS.getPathName();
-        String pathSep = OS.getPathSep();
 
         StringBuilder pathBuilder = new StringBuilder(builder.environment().get(pathName));
         for(String add : addPath)
-            pathBuilder.insert(0, add + pathSep);
+            pathBuilder.insert(0, add + File.pathSeparator);
         builder.environment().put(pathName, pathBuilder.toString());
 
         try {
