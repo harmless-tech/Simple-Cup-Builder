@@ -4,7 +4,6 @@ package tech.harmless.simplecupbuilder.utils.enums;
  * A class that holds all of the exit codes that this program can produce.
  */
 public final class EnumExitCodes {
-
     public static final int OKAY = 0;
     public static final int LOG_SETUP_FAILURE = -1;
     public static final int PROCESS_START_FAILURE = -2;

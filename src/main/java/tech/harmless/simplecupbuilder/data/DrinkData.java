@@ -17,13 +17,6 @@ public class DrinkData {
     protected String git_url;
     @Getter
     protected String git_branch;
-    /**
-     * This option may not be implemented.
-     * This option is considered unsecure and unsupported.
-     */
-    @Getter
-    @Deprecated(since = "0.0.1-ALPHA", forRemoval = true)
-    protected String git_sshKeyPassword;
     @Getter
     protected String git_internal_build_file;
 

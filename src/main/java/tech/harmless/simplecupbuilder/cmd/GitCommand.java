@@ -1,6 +1,7 @@
 package tech.harmless.simplecupbuilder.cmd;
 
 import tech.harmless.simplecupbuilder.SimpleCupBuilder;
+import tech.harmless.simplecupbuilder.utils.EmptyTypes;
 import tech.harmless.simplecupbuilder.utils.Log;
 import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
 
@@ -41,7 +42,7 @@ public final class GitCommand {
         if(id != null) {
             FinalTuple<Integer, String> cReturn = ProcessCommand.run("pwsh /c",
                     "git log -1 --pretty=format:\"%H\"", SimpleCupBuilder.BUILD_DIR + id,
-                    new String[0], null);
+                    EmptyTypes.STRING_ARRAY, null);
 
             Log.process("Git Log", cReturn);
 

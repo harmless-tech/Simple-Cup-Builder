@@ -1,5 +1,6 @@
 package tech.harmless.simplecupbuilder.data.cache;
 
+import tech.harmless.simplecupbuilder.utils.EmptyTypes;
 import tech.harmless.simplecupbuilder.utils.Log;
 
 import java.util.ArrayList;
@@ -12,8 +13,6 @@ public final class CacheIO {
     private static final Object syncObj = new Object(); // Must sync with this object when accessing cache.
     private static final HashMap<String, CacheData> cache = new HashMap<>();
     private static final int cacheVersion = 1;
-
-    private static final String[] emptyStrArray = new String[0];
 
     // Cache import/export.
 
@@ -59,10 +58,10 @@ public final class CacheIO {
                 removeList.forEach(cache::remove);
             }
 
-            return removeList.toArray(emptyStrArray);
+            return removeList.toArray(EmptyTypes.STRING_ARRAY);
         }
 
-        return emptyStrArray;
+        return EmptyTypes.STRING_ARRAY;
     }
 
     //TODO Add drink file hashes.

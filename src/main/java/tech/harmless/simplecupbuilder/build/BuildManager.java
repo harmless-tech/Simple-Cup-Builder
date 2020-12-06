@@ -4,6 +4,7 @@ import tech.harmless.simplecupbuilder.data.CupData;
 import tech.harmless.simplecupbuilder.data.DataIO;
 import tech.harmless.simplecupbuilder.data.DrinkData;
 import tech.harmless.simplecupbuilder.data.cache.CacheIO;
+import tech.harmless.simplecupbuilder.utils.EmptyTypes;
 import tech.harmless.simplecupbuilder.utils.Log;
 import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
 
@@ -76,7 +77,7 @@ public class BuildManager implements Runnable {
         }
 
         // Prune cache.
-        String[] ids = drinks.keySet().toArray(new String[0]);
+        String[] ids = drinks.keySet().toArray(EmptyTypes.STRING_ARRAY);
         for(String id : CacheIO.prune(ids))
             Log.info("Drink " + id + " was removed from the cache.");
 
