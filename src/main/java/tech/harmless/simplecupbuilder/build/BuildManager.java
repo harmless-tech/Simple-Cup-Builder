@@ -237,11 +237,15 @@ public class BuildManager implements Runnable {
 
                 if(GitCommand.clone(drinkIds[i], url))
                     if(GitCommand.checkout(drinkIds[i], branch)) {
-                        Log.info("Downloaded repo for drink " + drinkIds[i] + ".");
-                        drinkTags[i] = true;
+                        if(GitCommand.submoduleInit(drinkIds[i])) {
+                            Log.info("Downloaded repo for drink " + drinkIds[i] + ".");
+                            drinkTags[i] = true;
 
-                        String commit = GitCommand.commitHash(drinkIds[i]);
-                        CacheIO.setDrinkCommitHash(drinkIds[i], commit);
+                            String commit = GitCommand.commitHash(drinkIds[i]);
+                            CacheIO.setDrinkCommitHash(drinkIds[i], commit);
+                        }
+                        else
+                            Log.error("Could not init submodules for drink " + drinkIds[i] + ".");
                     }
                     else
                         Log.error("Could not switch branch to " + branch + " for drink " + drinkIds[i] + ".");
@@ -265,11 +269,15 @@ public class BuildManager implements Runnable {
                         }
 
                         if(GitCommand.pull(drinkIds[i], branch)) {
-                            Log.info("Pulled repo for drink " + drinkIds[i] + ".");
-                            drinkTags[i] = true;
+                            if(GitCommand.submoduleInit(drinkIds[i])) {
+                                Log.info("Pulled repo for drink " + drinkIds[i] + ".");
+                                drinkTags[i] = true;
 
-                            commit = GitCommand.commitHash(drinkIds[i]);
-                            CacheIO.setDrinkCommitHash(drinkIds[i], commit);
+                                commit = GitCommand.commitHash(drinkIds[i]);
+                                CacheIO.setDrinkCommitHash(drinkIds[i], commit);
+                            }
+                            else
+                                Log.error("Could not init submodules for drink " + drinkIds[i] + ".");
                         }
                         else
                             Log.error("Could not pull repo for drink " + drinkIds[i] + ".");
@@ -311,7 +319,7 @@ public class BuildManager implements Runnable {
 
         // Pre-Check
         boolean preCheck = true;
-        for(String cmd : drink.getBuild_preCheck()) {
+        for(String cmd : drink.getBuildWindows_preCheck()) {
             //TODO Allow add path for all platforms.
             FinalTuple<Integer, String> pr = ProcessCommand
                     .run(cupData.getProcess_windows(), cmd, drink.getBuildOps_wrkDir(), drink.getAddPath_windows(),
@@ -323,11 +331,13 @@ public class BuildManager implements Runnable {
                 break;
         }
 
+        Log.debug(preCheck);
+
         // Main
         if(preCheck) {
             // Build
             boolean built = true;
-            for(String cmd : drink.getBuild_commands()) {
+            for(String cmd : drink.getBuildWindows_commands()) {
                 //TODO Allow add path for all platforms.
                 FinalTuple<Integer, String> pr = ProcessCommand
                         .run(cupData.getProcess_windows(), cmd, drink.getBuildOps_wrkDir(), drink.getAddPath_windows(),
@@ -342,10 +352,11 @@ public class BuildManager implements Runnable {
             if(built) {
                 // Test
                 boolean testing = true;
-                for(String cmd : drink.getBuild_testCommands()) {
+                for(String cmd : drink.getBuildWindows_testCommands()) {
                     //TODO Allow add path for all platforms.
                     FinalTuple<Integer, String> pr = ProcessCommand
-                            .run(cupData.getProcess_windows(), cmd, drink.getBuildOps_wrkDir(), drink.getAddPath_windows(),
+                            .run(cupData.getProcess_windows(), cmd, drink.getBuildOps_wrkDir(),
+                                    drink.getAddPath_windows(),
                                     null);
                     Log.process("Drink test cmd: " + cmd, pr);
 

@@ -37,6 +37,20 @@ public final class GitCommand {
         return false;
     }
 
+    public static boolean submoduleInit(String id) {
+        if(id != null) {
+            FinalTuple<Integer, String> cReturn = ProcessCommand.run("pwsh /c",
+                    "git submodule init", SimpleCupBuilder.BUILD_DIR + id,
+                    EmptyTypes.STRING_ARRAY, null);
+
+            Log.process("Git Clone", cReturn);
+
+            return cReturn.getX() == 0;
+        }
+
+        return false;
+    }
+
     public static boolean fetch(String id) {
         if(id != null) {
             FinalTuple<Integer, String> cReturn = ProcessCommand.run("pwsh /c",
