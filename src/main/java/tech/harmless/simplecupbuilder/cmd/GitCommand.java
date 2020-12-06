@@ -23,20 +23,6 @@ public final class GitCommand {
         return false;
     }
 
-    public static boolean fetch(String id) {
-        if(id != null) {
-            FinalTuple<Integer, String> cReturn = ProcessCommand.run("pwsh /c",
-                    "git fetch", SimpleCupBuilder.BUILD_DIR + id,
-                    EmptyTypes.STRING_ARRAY, null);
-
-            Log.process("Git Clone", cReturn);
-
-            return cReturn.getX() == 0;
-        }
-
-        return false;
-    }
-
     public static boolean checkout(String id, String branch) {
         if(id != null && branch != null) {
             FinalTuple<Integer, String> cReturn = ProcessCommand.run("pwsh /c",
@@ -44,6 +30,20 @@ public final class GitCommand {
                     EmptyTypes.STRING_ARRAY, null);
 
             Log.process("Git Checkout", cReturn);
+
+            return cReturn.getX() == 0;
+        }
+
+        return false;
+    }
+
+    public static boolean fetch(String id) {
+        if(id != null) {
+            FinalTuple<Integer, String> cReturn = ProcessCommand.run("pwsh /c",
+                    "git fetch", SimpleCupBuilder.BUILD_DIR + id,
+                    EmptyTypes.STRING_ARRAY, null);
+
+            Log.process("Git Clone", cReturn);
 
             return cReturn.getX() == 0;
         }
@@ -79,7 +79,7 @@ public final class GitCommand {
 
         return false;
     }
-    
+
     public static String commitHash(String id) {
         if(id != null) {
             FinalTuple<Integer, String> cReturn = ProcessCommand.run("pwsh /c",
