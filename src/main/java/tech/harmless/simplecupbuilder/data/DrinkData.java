@@ -71,11 +71,11 @@ public class DrinkData {
 
     // --- build_macos ---
     @Getter
-    protected String[] buildMacos_preCheck;
+    protected String[] buildMacOS_preCheck;
     @Getter
-    protected String[] buildMacos_commands;
+    protected String[] buildMacOS_commands;
     @Getter
-    protected String[] buildMacos_testCommands;
+    protected String[] buildMacOS_testCommands;
 
     // --- add_path ---
     @Getter

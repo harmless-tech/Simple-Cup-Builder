@@ -1,10 +1,8 @@
 package tech.harmless.simplecupbuilder;
 
 import tech.harmless.simplecupbuilder.build.BuildManager;
-import tech.harmless.simplecupbuilder.cmd.GitCommand;
-import tech.harmless.simplecupbuilder.utils.Security;
-import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
 import tech.harmless.simplecupbuilder.utils.Log;
+import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,12 +19,14 @@ import java.util.Date;
  * Thread for build manager, builder, wait timer.
  * File metadata for cache file. (Better yet just have a cache file with a string printed to it to keep track of file "metadata")
  * Multiple cache files.
- * Custom file format and parser (for build files).
+ * Custom file format and parser (for build files). (Maybe switch to ini instead.)
  * user interface (console and gui)
  * (op=true) for build command options.
  * Have a web api using micronaut. (Maybe a frontend too)
  * Add null safety checks.
  * Javadocs!
+ * Use mongodb to store data and build logs.
+ * Custom jar api to allow for jars to be dynamically loaded for special build processes.
  */
 public class SimpleCupBuilder {
 
