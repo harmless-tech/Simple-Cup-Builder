@@ -134,6 +134,7 @@ public class BuildManager implements Runnable {
         Log.info("Successfully imported cup.");
 
         //TODO Check for repeating files. They should throw a fatal error.
+        //TODO Check drink file hash and compare to see if it should be updated.
         String[] drinkFileNames = cupData.getOptions_drinks();
 
         // Import drinks async.
@@ -177,10 +178,24 @@ public class BuildManager implements Runnable {
     }
 
     private void build() {
-        // Check
+        // Check repos.
+        Log.info("Checking for repo updates...");
         String[] updatedRepos = checkForUpdatesAndCreate();
+        Log.info("Checking for repo updates... Done!");
 
-        //TODO Internal build files.
+        // Internal build files.
+        //TODO Check internal drink file hash and compare to see if it should be updated.
+        Log.info("Updating internal build files...");
+        for(String id : updatedRepos) {
+            synchronized(buildSync) {
+                DrinkData drink = drinks.get(id);
+                if(drink.getGit_internal_build_file().isEmpty())
+                    DataIO.processInternalDrink(drink);
+            }
+        }
+        Log.info("Updating internal build files... Done!");
+
+        //
     }
 
     // Also checks for repos that don't exist yet.

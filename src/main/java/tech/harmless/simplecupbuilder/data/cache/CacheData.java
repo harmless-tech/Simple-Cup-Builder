@@ -10,8 +10,8 @@ class CacheData {
 
     // General Info
     protected String name;
-    protected String fileHash;
-    protected String iFileHash;
+    protected String fileHash; //TODO Is this even needed? maybe use to update while the program is running?
+    //protected String iFileHash; //TODO Allow for internal files to be hashed.
 
     // Build Info
     protected String commitHash;
@@ -24,7 +24,7 @@ class CacheData {
 
         this.name = "";
         this.fileHash = "";
-        this.iFileHash = "";
+        //this.iFileHash = "";
 
         commitHash = "";
         buildNumber = -1;
