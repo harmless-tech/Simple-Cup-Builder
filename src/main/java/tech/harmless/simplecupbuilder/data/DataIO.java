@@ -88,7 +88,7 @@ public final class DataIO {
                         ((TomlArray) root.getOrDefault("archive.files", EmptyTypes.TOML_ARRAY))
                                 .toArray(EmptyTypes.STRING_ARRAY);
 
-                data.buildOps_wrkDir = (String) root.getOrDefault("build_ops.wrk_dir", EmptyTypes.STRING);
+                data.buildOps_wrkDir = (String) root.getOrDefault("build_ops.wrk_dir", ".");
                 data.buildOps_fullCleanBuild = (boolean) root.getOrDefault("build_ops.full_clean_build", false);
                 data.buildOps_removeBeforeBuild =
                         ((TomlArray) root.getOrDefault("build_ops.remove_before_build", EmptyTypes.TOML_ARRAY))
@@ -191,7 +191,7 @@ public final class DataIO {
                         ((TomlArray) root.getOrDefault("archive.files", EmptyTypes.TOML_ARRAY))
                                 .toArray(EmptyTypes.STRING_ARRAY);
 
-                data.buildOps_wrkDir = (String) root.getOrDefault("build_ops.wrk_dir", EmptyTypes.STRING);
+                data.buildOps_wrkDir = (String) root.getOrDefault("build_ops.wrk_dir", ".");
                 data.buildOps_fullCleanBuild = (boolean) root.getOrDefault("build_ops.full_clean_build", false);
                 data.buildOps_removeBeforeBuild =
                         ((TomlArray) root.getOrDefault("build_ops.remove_before_build", EmptyTypes.TOML_ARRAY))

@@ -331,8 +331,6 @@ public class BuildManager implements Runnable {
                 break;
         }
 
-        Log.debug(preCheck);
-
         // Main
         if(preCheck) {
             // Build
