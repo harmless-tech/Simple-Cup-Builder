@@ -2,7 +2,7 @@
 .gradle/
 
 out/
-build/
+/build/
 
 temp
 tmp
@@ -10,5 +10,5 @@ tmp
 *.tmp
 *.log
 
-scb_cache/
-scb_tmp/
+scb/.scb/*
+scb/.scb

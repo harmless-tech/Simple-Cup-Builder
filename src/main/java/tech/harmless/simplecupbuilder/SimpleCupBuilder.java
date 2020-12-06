@@ -1,38 +1,95 @@
 package tech.harmless.simplecupbuilder;
 
+import tech.harmless.simplecupbuilder.build.BuildManager;
 import tech.harmless.simplecupbuilder.utils.Log;
+import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
 
-import java.io.BufferedReader;
-import java.io.Console;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.util.Date;
 
-/*
- * Inject build number and other enviroment args.
+/* TODO
+ * Inject build number and other environment args.
+ * Delete tmp directory on exit?
+ * Add a way to check for new releases.
+ *
+ * jPackage support. (Would be nice)
+ * File metadata for cache file. (Better yet just have a cache file with a string printed to it to keep track of file "metadata")
+ * Multiple cache files.
+ * Custom file format and parser (for build files). (Maybe switch to ini instead.)
+ * user interface (console and gui)
+ * (op=true) for build command options.
+ * Have a web api using micronaut. (Maybe a frontend too)
+ * Add null safety checks.
+ * Javadocs! and comments!
+ * Use mongodb to store data and build logs.
+ * Custom jar api to allow for jars to be dynamically loaded for special build processes.
  */
-
 public class SimpleCupBuilder {
 
+    // Top level directories.
     public static final String DATA_DIR = "scb/";
-    public static final String CACHE_DIR = "scb_cache/";
-    public static final String GIT_DIR = CACHE_DIR + "git/";
-    public static final String TMP_DIR = CACHE_DIR + "tmp/";
+    public static final String INTERNAL_DIR = DATA_DIR + ".scb/";
+    public static final String CACHE_DIR = INTERNAL_DIR + "cache/";
+    public static final String BUILD_DIR = INTERNAL_DIR + "builds/";
+    public static final String ARCHIVE_DIR = INTERNAL_DIR + "archives/";
+    public static final String TMP_DIR = INTERNAL_DIR + "tmp/";
 
+    // File extensions.
+    public static final String CONFIG_FILE_EXT = ".toml";
+    public static final String LOG_FILE_EXT = ".log";
+    public static final String CACHE_FILE_EXT = ".cache";
+    public static final String META_FILE_EXT = ".metadata"; // Used to keep track of cache info. (Cache version)
+    public static final String HASH_FILE_EXT = ".hash";
+    public static final String COMPRESSED_FILE_EXT = ".zip";
+    public static final String INSTANCE_LOCK_FILE_EXT = ".instance_lock";
+
+    // File prefixes.
+    public static final String ARCHIVE_FILE_PREFIX = "archive-";
+
+    // Files.
+    public static final String INSTANCE_LOCK_FILE = TMP_DIR + INSTANCE_LOCK_FILE_EXT;
+    public static final String LOG_FILE = INTERNAL_DIR + "scb" + LOG_FILE_EXT;
+    public static final String LOG_ERR_FILE = INTERNAL_DIR + "scb-err" + LOG_FILE_EXT;
+    public static final String CUP_FILE = DATA_DIR + "cup" + CONFIG_FILE_EXT;
+
+    // Dynamic options.
     public static boolean DEBUG = false;
 
+    //TODO Move some things to their own methods.
     public static void main(String[] args) {
         // Before
         System.out.println("Program launch at " + new Date() + ".");
 
         createDirs();
 
+        // Lock Check
+        FileOutputStream instanceLock = null;
+        FileLock lock = null;
+        try {
+            instanceLock = new FileOutputStream(INSTANCE_LOCK_FILE);
+            FileChannel fc = instanceLock.getChannel();
+            lock = fc.tryLock();
+
+            if(lock == null) {
+                System.err.println("Could not create instance lock! Currently held by another program!");
+                System.exit(EnumExitCodes.LOCK_SETUP_FAILURE);
+            }
+        }
+        catch(IOException e) {
+            System.err.println("Could not create instance lock!");
+            e.printStackTrace();
+            System.exit(EnumExitCodes.LOCK_SETUP_FAILURE);
+        }
+
         // After
         Log.info("Name: " + BuildConfig.NAME + ", Version: " + BuildConfig.VERSION +
                 ", Author: " + BuildConfig.AUTHOR_NAME + ", Build Time: " + BuildConfig.BUILD_TIME);
 
+        //TODO Move this to own method?
         for(String arg : args) {
             switch(arg) {
                 case "--debug" -> {
@@ -44,66 +101,70 @@ public class SimpleCupBuilder {
             }
         }
 
-        //TODO Create required dirs?
-        //TODO Search scb directory and search for build config files.
+        // Setup Processes
+        BuildManager buildManager = new BuildManager();
+        // CONSOLE
+
+        Thread buildManagerThread = new Thread(null, buildManager, "Build Manager Thread");
+        Thread consoleThread = new Thread(null, null, "Console Thread");
+
+        buildManagerThread.start();
+        consoleThread.start(); //TODO Allow user input.
 
         //TODO Testing.
         try {
-            /*Process p1 = Runtime.getRuntime().exec("pwsh /c java", new String[]{}, new File(TMP_DIR));
-            Process p2 = p1.onExit().join();
+            //FinalTuple<Integer, String> cReturn =
+            //ProcessCommand.run("pwsh /c", "rustc --version", CACHE_DIR, new String[0], new HashMap<>());
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p2.getInputStream()));
-            StringBuilder builder = new StringBuilder();
-            String line = null;
-            while((line = reader.readLine()) != null) {
-                builder.append(line);
-                builder.append(System.getProperty("line.separator"));
-            }
-            String result = builder.toString();
+            //Log.process("\n" + cReturn.getY());
+            //Log.process("Exit Code " + cReturn.getX());
 
-            BufferedReader readerErr = new BufferedReader(new InputStreamReader(p2.getErrorStream()));
-            StringBuilder builderErr = new StringBuilder();
-            String lineErr = null;
-            while((lineErr = reader.readLine()) != null) {
-                builder.append(lineErr);
-                builder.append(System.getProperty("line.separator"));
-            }
-            String resultErr = builder.toString();
+            //cReturn = ProcessCommand.run("pwsh /c", "git status", CACHE_DIR, new String[0], new HashMap<>());
 
-            System.out.println(result);
-            System.out.println(resultErr);
-            System.out.println(p2.exitValue());*/
+            //Log.process("\n" + cReturn.getY());
+            //Log.process("Exit Code " + cReturn.getX());
 
-            ProcessBuilder pBuilder = new ProcessBuilder("pwsh", "/c", "rustc", "--version");
-            /*pBuilder.environment().forEach((key, value) -> {
-                System.out.println(key + "        " + value);
-            });*/
-            pBuilder.redirectErrorStream(true);
-            Process p1 = pBuilder.start();
-            p1.onExit().join();
+            /*File f = new File(CUP_FILE);
+            BufferedReader is = new BufferedReader(new FileReader(f));
+            TomlTable table = Toml.from(is);
+            Log.debug(table);*/
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p1.getInputStream()));
-            StringBuilder builder = new StringBuilder();
-            String line;
-            while((line = reader.readLine()) != null) {
-                builder.append(line);
-                builder.append(System.getProperty("line.separator"));
-            }
-            String result = builder.toString();
-
-            System.out.println(result);
-            System.out.println(p1.exitValue());
+            //GitCommand.commitHash("l");
+            //GitCommand.commitHash("dddp");
         }
         catch(Exception e) {
             e.printStackTrace();
         }
         //
+
+        // End
+        try {
+            buildManagerThread.join();
+            consoleThread.join(); //TODO This thread should end when the buildManager one does.
+        }
+        catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Log.info(BuildConfig.NAME + " closing...");
+
+        try {
+            lock.close();
+            instanceLock.close();
+        }
+        catch(IOException e) {
+            System.err.println("Could not release instance lock!");
+            e.printStackTrace();
+            System.exit(EnumExitCodes.LOCK_RELEASE_FAILURE);
+        }
     }
 
     private static void createDirs() {
         new File(DATA_DIR).mkdirs();
+        new File(INTERNAL_DIR).mkdirs();
         new File(CACHE_DIR).mkdirs();
-        new File(GIT_DIR).mkdirs();
+        new File(BUILD_DIR).mkdirs();
+        new File(ARCHIVE_DIR).mkdirs();
         new File(TMP_DIR).mkdirs();
     }
 }

@@ -1,8 +1,9 @@
 package tech.harmless.simplecupbuilder.utils;
 
 import tech.harmless.simplecupbuilder.SimpleCupBuilder;
+import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
+import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
@@ -11,61 +12,78 @@ import java.util.Locale;
 
 public final class Log {
 
+    private static final Object syncObj = new Object();
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSSS", Locale.ENGLISH);
     private static PrintStream outStream;
     private static PrintStream errStream;
 
     static {
         try {
-            String dir = SimpleCupBuilder.TMP_DIR;
-            new File(dir).mkdirs();
-
-            outStream = new PrintStream(new File(dir + "scb.log"));
+            outStream = new PrintStream(SimpleCupBuilder.LOG_FILE);
             outStream.println("Out logging init at " + new Date() + ".");
             outStream.flush();
 
-            errStream = new PrintStream(new File(dir + "scb-err.log"));
+            errStream = new PrintStream(SimpleCupBuilder.LOG_ERR_FILE);
             errStream.println("Err logging init at " + new Date() + ".");
             errStream.flush();
         }
         catch(IOException e) {
             System.err.println("Could not setup loggers!");
             e.printStackTrace();
-            System.exit(-1);
+            System.exit(EnumExitCodes.LOG_SETUP_FAILURE);
         }
     }
 
+    public static void process(String processName, FinalTuple<Integer, String> cmd) {
+        if(processName == null || cmd == null)
+            return;
+
+        String str = "Process " + processName + " exited with exit code " + cmd.getX() + ".\n" + cmd.getY();
+        out("PROCESS", str);
+    }
+
     public static void info(Object message) {
+        if(message == null)
+            return;
+
         out("INFO", message);
     }
 
     public static void warn(Object message) {
+        if(message == null)
+            return;
+
         out("WARN", message);
     }
 
     public static void debug(Object message) {
-        if(!SimpleCupBuilder.DEBUG)
+        if(message == null || !SimpleCupBuilder.DEBUG)
             return;
 
         out("DEBUG", message);
     }
 
     public static void trace(Object caller, Object message) {
-        if(!SimpleCupBuilder.DEBUG)
+        if(message == null || !SimpleCupBuilder.DEBUG)
             return;
 
         out("TRACE", "Message from " + caller + ": " + message);
     }
 
     public static void error(Object message) {
+        if(message == null)
+            return;
+
         err("ERROR", message);
     }
 
     public static void exception(Exception e) {
-        e.printStackTrace();
-        e.printStackTrace(errStream);
+        synchronized(syncObj) {
+            e.printStackTrace();
+            e.printStackTrace(errStream);
 
-        errStream.flush();
+            errStream.flush();
+        }
     }
 
     public static void fatal(int code, Object message) {
@@ -78,17 +96,27 @@ public final class Log {
     }
 
     public static void print(Object message) {
-        System.out.println(message);
+        if(message == null)
+            return;
 
-        outStream.println(message);
-        outStream.flush();
+        synchronized(syncObj) {
+            System.out.println(message);
+
+            outStream.println(message);
+            outStream.flush();
+        }
     }
 
     public static void printErr(Object message) {
-        System.err.println(message);
+        if(message == null)
+            return;
 
-        errStream.println(message);
-        errStream.flush();
+        synchronized(syncObj) {
+            System.err.println(message);
+
+            errStream.println(message);
+            errStream.flush();
+        }
     }
 
     private static void out(String header, Object message) {

@@ -1,0 +1,27 @@
+# CupData: Example cup config file.
+
+[options]
+git_update_timer = 15 # In minutes.
+parallel_builds = false # This could break certin build processes. Could also overwhelm stuff. #TODO Implement!
+drinks = [
+    "drink_hta",
+    "drink_scb",
+    "drink_null"
+]
+
+[process]
+windows = "pwsh /c" # Options: cmd /c, pwsh /c, or others (If pwsh is installed and on the path)
+#linux = "" TODO Remove or keep?
+#macos = "" TODO Remove or keep?
+
+[add_path]
+windows = [
+]
+linux = [
+]
+macos = [
+]
+
+[add_env] # SCB_VERSION, BUILD_TRIGGER_TIME
+
+[alias] # This replaces anything in the command. #TODO Implement!

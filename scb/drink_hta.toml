@@ -1,0 +1,84 @@
+# DrinkData: Example drink config file.
+#TODO Change to custom build file format.
+
+[drink_info]
+name = "HT-Assembly Drink"
+id = "htad" # Drink ids cannot conflict.
+#build_file_version = "1" # Replaced with hashing file contents.
+
+[git]
+url = "https://github.com/harmless-tech/HT-Assembly.git"
+branch = "c-dev"
+internal_build_file = "" # Uses a build file in the git project. If this option is used all options below this are ignored.
+
+[archive]
+format = "zip" # zip or folder
+limit = 5
+files = [
+]
+
+[build_ops]
+wrk_dir = "" # Based off of the git created directory.
+full_clean_build = false
+remove_before_build = [
+]
+split_build = true # If this is true then the build cmds are different for every platform.
+
+[build] # This is only used if spilt_build is false.
+pre_check = [ # These cmds must exit with a code 0 for the build to be started.
+]
+cmds = [
+]
+test_cmds = [
+]
+
+#TODO Specific platform builds. Planned: 0.1.0-ALPHA.
+[build_windows]
+pre_check = [ # These cmds must exit with a code 0 for the build to be started.
+    'cmake --version',
+    'ninja --version',
+    'clang --version'
+]
+cmds = [
+    '.\vendors\vcpkg\bootstrap-vcpkg.bat -disableMetrics',
+    '.\vendors\vcpkg\vcpkg install binn:x64-windows-static',
+    '.\vendors\vcpkg\vcpkg install parson:x64-windows-static',
+    '.\vendors\vcpkg\vcpkg install pthreads:x64-windows-static',
+    '.\vendors\vcpkg\vcpkg install xxhash:x64-windows-static',
+    'mkdir -f build',
+    'cd build && cmake -G Ninja ..',
+	'cd build && ninja'
+]
+test_cmds = [
+    'echo "No tests..."'
+]
+
+
+[build_linux]
+pre_check = [ # These cmds must exit with a code 0 for the build to be started.
+]
+cmds = [
+]
+test_cmds = [
+]
+
+[build_macos]
+pre_check = [ # These cmds must exit with a code 0 for the build to be started.
+]
+cmds = [
+]
+test_cmds = [
+]
+
+# These add options may not override options in the cup.toml file.
+[add_path]
+windows = [
+]
+linux = [
+]
+macos = [
+]
+
+[add_env] # PROJECT_NAME, BUILD_FILE_VERSION, BUILD_COUNT, BUILD_START_TIME, BUILD_COMMIT
+
+[alias] #TODO Implement!

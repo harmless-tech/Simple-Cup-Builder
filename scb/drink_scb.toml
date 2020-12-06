@@ -1,0 +1,74 @@
+# DrinkData: Example drink config file.
+
+[drink_info]
+name = "Simple Cup Builder"
+id = "scbd" # Drink ids cannot conflict.
+#build_file_version = "1"
+
+[git]
+url = "https://github.com/harmless-tech/Simple-Cup-Builder.git"
+branch = "ht/dev"
+internal_build_file = "" # Uses a build file in the git project. If this option is used all options below this are ignored.
+
+[archive]
+format = "zip" # zip or folder
+limit = 5
+files = [
+]
+
+[build_ops]
+wrk_dir = "" # Based off of the git created directory.
+full_clean_build = false
+remove_before_build = [
+]
+split_build = true # If this is true then the build cmds are different for every platform.
+
+[build] # This is only used if spilt_build is false.
+pre_check = [ # These cmds must exit with a code 0 for the build to be started.
+]
+cmds = [
+]
+test_cmds = [
+]
+
+#TODO Specific platform builds. Planned: 0.1.0-ALPHA.
+[build_windows]
+pre_check = [ # These cmds must exit with a code 0 for the build to be started.
+    'java --version'
+]
+cmds = [
+    './gradlew jar'
+]
+test_cmds = [
+    './gradlew test'
+]
+
+
+[build_linux]
+pre_check = [ # These cmds must exit with a code 0 for the build to be started.
+]
+cmds = [
+]
+test_cmds = [
+]
+
+[build_macos]
+pre_check = [ # These cmds must exit with a code 0 for the build to be started.
+]
+cmds = [
+]
+test_cmds = [
+]
+
+# These add options may not override options in the cup.toml file.
+[add_path]
+windows = [
+]
+linux = [
+]
+macos = [
+]
+
+[add_env] # PROJECT_NAME, BUILD_FILE_VERSION, BUILD_COUNT, BUILD_START_TIME, BUILD_COMMIT
+
+[alias] #TODO Implement!
