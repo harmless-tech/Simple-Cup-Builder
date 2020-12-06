@@ -29,11 +29,6 @@ public final class CacheIO {
 
     // Cache manipulation.
 
-    public static void addDrinks(String[] ids) {
-        for(String id : ids)
-            addDrink(id);
-    }
-
     public static void addDrink(String id) {
         if(id != null) {
             CacheData data = new CacheData(id);

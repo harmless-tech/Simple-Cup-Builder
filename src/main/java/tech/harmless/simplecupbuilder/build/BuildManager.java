@@ -44,22 +44,17 @@ public class BuildManager implements Runnable {
             shouldRun = false;
             return;
         }
+        Log.info("Successfully imported cup.");
 
-        //TODO Check for repeating ids. They should throw a fatal error.
-        String[] drinkIds = cupData.getOptions_drinks();
-
-        // Cache adding and removing.
-        CacheIO.addDrinks(cupData.getOptions_drinks());
-        for(String id : CacheIO.prune(cupData.getOptions_drinks()))
-            Log.info("Drink " + id + " was removed from the cache.");
+        //TODO Check for repeating files. They should throw a fatal error.
+        String[] drinkFileNames = cupData.getOptions_drinks();
 
         // Import drinks async.
-        //TODO Use ? instead???
-        CompletableFuture<FinalTuple<DrinkData, String>>[] async = new CompletableFuture[drinkIds.length];
+        List<CompletableFuture<FinalTuple<DrinkData, String>>> async = new ArrayList<>();
 
-        for(int i = 0; i < drinkIds.length; i++) {
+        for(int i = 0; i < drinkFileNames.length; i++) {
             final int ai = i;
-            async[i] = CompletableFuture.supplyAsync(() -> DataIO.processDrink(drinkIds[ai]));
+            async.add(CompletableFuture.supplyAsync(() -> DataIO.processDrink(drinkFileNames[ai])));
         }
 
         for(CompletableFuture<FinalTuple<DrinkData, String>> fut : async) {
@@ -68,11 +63,22 @@ public class BuildManager implements Runnable {
                 DrinkData data = tuple.getX();
                 drinks.put(data.getDrinkInfo_id(), data);
 
+                Log.info("Successfully imported drink " + data.getDrinkInfo_id() + ".");
+
+                //TODO Check for repeating ids, they should throw a fatal error.
+
+                // Add to cache, if its not there already.
+                CacheIO.addDrink(data.getDrinkInfo_id());
                 CacheIO.setDrinkFileHash(data.getDrinkInfo_id(), tuple.getY());
             }
             else
-                Log.error("Drink data failed to import."); //TODO Add id?
+                Log.error("Drink data failed to import.");
         }
+
+        // Prune cache.
+        String[] ids = drinks.keySet().toArray(new String[0]);
+        for(String id : CacheIO.prune(ids))
+            Log.info("Drink " + id + " was removed from the cache.");
 
         //TODO More?
     }
@@ -84,11 +90,9 @@ public class BuildManager implements Runnable {
 
         cupData = null;
         drinks = new HashMap<>();
-        
-        Log.debug("Hey!");
 
+        // Setup
         importData();
-        Log.debug("Run: " + shouldRun);
 
         while(shouldRun) {
             try {

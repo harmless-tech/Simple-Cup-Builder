@@ -17,6 +17,7 @@ public final class DataIO {
 
     private static final String emptyStr = "";
     private static final String[] emptyStrArray = new String[0];
+    private static final TomlArray emptyArray = new TomlArray();
 
     //TODO Cup data does not need to be hashed? But should it?
     @SuppressWarnings("Duplicates")
@@ -29,19 +30,19 @@ public final class DataIO {
                 BufferedReader br = new BufferedReader(new FileReader(f));
                 TomlTable root = Toml.from(br);
 
-                data.options_gitUpdateTimer = (long) root.getOrDefault("options.git_update_timer", 15);
+                data.options_gitUpdateTimer = (long) root.getOrDefault("options.git_update_timer", 15L);
                 data.options_parallelBuilds = (boolean) root.getOrDefault("options.parallel_builds", false);
                 data.options_drinks =
-                        ((TomlArray) root.getOrDefault("options.drinks", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("options.drinks", emptyArray)).toArray(emptyStrArray);
 
                 data.process_windows = (String) root.getOrDefault("process.windows", "pwsh /c");
 
                 data.addPath_windows =
-                        ((TomlArray) root.getOrDefault("add_path.windows", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("add_path.windows", emptyArray)).toArray(emptyStrArray);
                 data.addPath_linux =
-                        ((TomlArray) root.getOrDefault("add_path.linux", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("add_path.linux", emptyArray)).toArray(emptyStrArray);
                 data.addPath_macos =
-                        ((TomlArray) root.getOrDefault("add_path.macos", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("add_path.macos", emptyArray)).toArray(emptyStrArray);
 
                 //TODO Environment.
                 data.envMap = null;
@@ -82,52 +83,52 @@ public final class DataIO {
                 data.git_internal_build_file = (String) root.getOrDefault("git.internal_build_file", emptyStr);
 
                 data.archive_format = (String) root.getOrDefault("archive.format", "zip");
-                data.archive_limit = (long) root.getOrDefault("archive.limit", 5);
+                data.archive_limit = (long) root.getOrDefault("archive.limit", 5L);
                 data.archive_files =
-                        ((TomlArray) root.getOrDefault("archive.files", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("archive.files", emptyArray)).toArray(emptyStrArray);
 
                 data.buildOps_wrkDir = (String) root.getOrDefault("build_ops.wrk_dir", emptyStr);
                 data.buildOps_fullCleanBuild = (boolean) root.getOrDefault("build_ops.full_clean_build", false);
                 data.buildOps_removeBeforeBuild =
-                        ((TomlArray) root.getOrDefault("build_ops.remove_before_build", emptyStrArray))
+                        ((TomlArray) root.getOrDefault("build_ops.remove_before_build", emptyArray))
                                 .toArray(emptyStrArray);
                 data.buildOps_splitBuild = (boolean) root.getOrDefault("build_ops.split_build", true);
 
                 data.build_preCheck =
-                        ((TomlArray) root.getOrDefault("build.pre_check", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("build.pre_check", emptyArray)).toArray(emptyStrArray);
                 data.build_commands =
-                        ((TomlArray) root.getOrDefault("build.cmds", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("build.cmds", emptyArray)).toArray(emptyStrArray);
                 data.build_testCommands =
-                        ((TomlArray) root.getOrDefault("build.test_cmds", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("build.test_cmds", emptyArray)).toArray(emptyStrArray);
 
-                data.buildWindows_preCheck = ((TomlArray) root.getOrDefault("build_windows.pre_check", emptyStrArray))
+                data.buildWindows_preCheck = ((TomlArray) root.getOrDefault("build_windows.pre_check", emptyArray))
                         .toArray(emptyStrArray);
                 data.buildWindows_commands =
-                        ((TomlArray) root.getOrDefault("build_windows.cmds", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("build_windows.cmds", emptyArray)).toArray(emptyStrArray);
                 data.buildWindows_testCommands =
-                        ((TomlArray) root.getOrDefault("build_windows.test_cmds", emptyStrArray))
+                        ((TomlArray) root.getOrDefault("build_windows.test_cmds", emptyArray))
                                 .toArray(emptyStrArray);
 
                 data.buildLinux_preCheck =
-                        ((TomlArray) root.getOrDefault("build_linux.pre_check", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("build_linux.pre_check", emptyArray)).toArray(emptyStrArray);
                 data.buildLinux_commands =
-                        ((TomlArray) root.getOrDefault("build_linux.cmds", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("build_linux.cmds", emptyArray)).toArray(emptyStrArray);
                 data.buildLinux_testCommands =
-                        ((TomlArray) root.getOrDefault("build_linux.test_cmds", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("build_linux.test_cmds", emptyArray)).toArray(emptyStrArray);
 
                 data.buildMacOS_preCheck =
-                        ((TomlArray) root.getOrDefault("build_macos.pre_check", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("build_macos.pre_check", emptyArray)).toArray(emptyStrArray);
                 data.buildMacOS_commands =
-                        ((TomlArray) root.getOrDefault("build_macos.cmds", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("build_macos.cmds", emptyArray)).toArray(emptyStrArray);
                 data.buildMacOS_testCommands =
-                        ((TomlArray) root.getOrDefault("build_macos.test_cmds", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("build_macos.test_cmds", emptyArray)).toArray(emptyStrArray);
 
                 data.addPath_windows =
-                        ((TomlArray) root.getOrDefault("add_path.windows", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("add_path.windows", emptyArray)).toArray(emptyStrArray);
                 data.addPath_linux =
-                        ((TomlArray) root.getOrDefault("add_path.linux", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("add_path.linux", emptyArray)).toArray(emptyStrArray);
                 data.addPath_macos =
-                        ((TomlArray) root.getOrDefault("add_path.macos", emptyStrArray)).toArray(emptyStrArray);
+                        ((TomlArray) root.getOrDefault("add_path.macos", emptyArray)).toArray(emptyStrArray);
 
                 //TODO Environment.
                 data.envMap = null;
@@ -135,10 +136,10 @@ public final class DataIO {
                 data.aliasMap = null;
 
                 // Hash
+                br = new BufferedReader(new FileReader(f));
                 StringBuilder sb = new StringBuilder();
                 String line;
 
-                br.reset();
                 while((line = br.readLine()) != null)
                     sb.append(line);
 

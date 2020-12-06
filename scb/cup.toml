@@ -4,7 +4,9 @@
 git_update_timer = 15 # In minutes.
 parallel_builds = false # This could break certin build processes. Could also overwhelm stuff. #TODO Implement!
 drinks = [
-    "drink_hta"
+    "drink_hta",
+    "drink_scb",
+    "drink_null"
 ]
 
 [process]
