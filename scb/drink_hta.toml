@@ -35,18 +35,19 @@ test_cmds = [
 #TODO Specific platform builds. Planned: 0.1.0-ALPHA.
 [build_windows]
 pre_check = [ # These cmds must exit with a code 0 for the build to be started.
-    "cmake --version",
-    "ninja --version",
-    "clang --version"
+    'cmake --version',
+    'ninja --version',
+    'clang --version'
 ]
 cmds = [
-    "./vendors/vcpkg/bootstrap-vcpkg.bat -disableMetrics",
-    "./vendors/vcpkg/vcpkg install binn:x64-windows-static",
-    "./vendors/vcpkg/vcpkg install parson:x64-windows-static",
-    "./vendors/vcpkg/vcpkg install pthreads:x64-windows-static",
-    "./vendors/vcpkg/vcpkg install xxhash:x64-windows-static",
-    "mkdir build",
-    "cmake -G Ninja .."
+    '.\vendors\vcpkg\bootstrap-vcpkg.bat -disableMetrics',
+    '.\vendors\vcpkg\vcpkg install binn:x64-windows-static',
+    '.\vendors\vcpkg\vcpkg install parson:x64-windows-static',
+    '.\vendors\vcpkg\vcpkg install pthreads:x64-windows-static',
+    '.\vendors\vcpkg\vcpkg install xxhash:x64-windows-static',
+    'mkdir -f build',
+    'cd build && cmake -G Ninja ..',
+	'cd build && ninja'
 ]
 test_cmds = [
     'echo "No tests..."'

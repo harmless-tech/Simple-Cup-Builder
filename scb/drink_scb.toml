@@ -6,28 +6,24 @@ id = "scbd" # Drink ids cannot conflict.
 #build_file_version = "1"
 
 [git]
-url = ""
-branch = "master"
-ssh_key_password = "" #TODO Implement!
+url = "https://github.com/harmless-tech/Simple-Cup-Builder.git"
+branch = "ht/dev"
+internal_build_file = "" # Uses a build file in the git project. If this option is used all options below this are ignored.
 
-internal_build_file = "NULL" # Uses the build file in the git project. If this option is used all options below this are ignored.
-
-[export]
-files = [ # Files to be moved to storage.
+[archive]
+format = "zip" # zip or folder
+limit = 5
+files = [
 ]
 
 [build_ops]
 wrk_dir = "" # Based off of the git created directory.
 full_clean_build = false
-clean_before_build = [
+remove_before_build = [
 ]
-build_windows = true # Allow building on windows.
-build_linux = true # Allow building on linux.
-build_macos = true # Allow building on macos.
 split_build = true # If this is true then the build cmds are different for every platform.
-one_os_build = "" # windows, linux, macos. If this is one of these options then the build use use this platform to build other platform builds.
 
-[build]
+[build] # This is only used if spilt_build is false.
 pre_check = [ # These cmds must exit with a code 0 for the build to be started.
 ]
 cmds = [
@@ -35,13 +31,16 @@ cmds = [
 test_cmds = [
 ]
 
+#TODO Specific platform builds. Planned: 0.1.0-ALPHA.
 [build_windows]
 pre_check = [ # These cmds must exit with a code 0 for the build to be started.
+    'java --version'
 ]
 cmds = [
-    # ./gradlew --no-daemon -S build
+    './gradlew jar'
 ]
 test_cmds = [
+    './gradlew test'
 ]
 
 
@@ -61,7 +60,7 @@ cmds = [
 test_cmds = [
 ]
 
-# These add options may not override options in the scb.toml file.
+# These add options may not override options in the cup.toml file.
 [add_path]
 windows = [
 ]
