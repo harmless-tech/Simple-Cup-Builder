@@ -1,5 +1,7 @@
 package tech.harmless.simplecupbuilder.data.cache;
 
+import tech.harmless.simplecupbuilder.utils.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,18 +29,20 @@ public final class CacheIO {
 
     // Cache manipulation.
 
-    public static boolean addDrink(String id, String name, String fileHash, String iFileHash) {
-        if(id != null && name != null && fileHash != null && iFileHash != null) {
-            CacheData data = new CacheData(id, name, fileHash, iFileHash);
+    public static void addDrinks(String[] ids) {
+        for(String id : ids)
+            addDrink(id);
+    }
+
+    public static void addDrink(String id) {
+        if(id != null) {
+            CacheData data = new CacheData(id);
 
             synchronized(syncObj) {
-                cache.put(id, data);
+                if(!cache.containsKey(id))
+                    cache.put(id, data);
             }
-
-            return true;
         }
-
-        return false;
     }
 
     //TODO Maybe this should prune and setup cache.
@@ -64,5 +68,19 @@ public final class CacheIO {
         }
 
         return emptyStrArray;
+    }
+
+    //TODO Add drink file hashes.
+    public static void setDrinkFileHash(String id, String hash) {
+        if(id != null && hash != null) {
+            synchronized(syncObj) {
+                CacheData data = cache.get(id);
+
+                if(data != null)
+                    data.fileHash = hash;
+                else
+                    Log.warn("Drink " + id + " is not in the cache, but something tried to change the file hash.");
+            }
+        }
     }
 }
