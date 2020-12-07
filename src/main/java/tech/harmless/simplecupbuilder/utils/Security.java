@@ -1,5 +1,6 @@
 package tech.harmless.simplecupbuilder.utils;
 
+import org.jetbrains.annotations.NotNull;
 import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
 
 import java.nio.charset.StandardCharsets;
@@ -14,6 +15,7 @@ public final class Security {
      * @param input A {@code String} that is used to generate the hash.
      * @return A {@code String} that is the hashed version of the input.
      */
+    @NotNull
     public static String unsecureSha256(String input) {
         String generated = "";
         try {
@@ -34,6 +36,7 @@ public final class Security {
      * @param input A {@code String} that is used to generate the hash.
      * @return A {@code String} that is the hashed version of the input.
      */
+    @NotNull
     public static String unsecureSha512(String input) {
         String generated = "";
         try {
@@ -47,6 +50,7 @@ public final class Security {
         return generated;
     }
 
+    @NotNull
     private static String unsecureGenerate(String algorithm, String input) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance(algorithm);
         byte[] hash = md.digest(input.getBytes(StandardCharsets.UTF_8));

@@ -1,5 +1,7 @@
 package tech.harmless.simplecupbuilder.utils;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tech.harmless.simplecupbuilder.SimpleCupBuilder;
 import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
 import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
@@ -34,7 +36,7 @@ public final class Log {
         }
     }
 
-    public static void process(String processName, FinalTuple<Integer, String> cmd) {
+    public static void process(@Nullable String processName, @Nullable FinalTuple<Integer, String> cmd) {
         if(processName == null || cmd == null)
             return;
 
@@ -42,42 +44,42 @@ public final class Log {
         out("PROCESS", str);
     }
 
-    public static void info(Object message) {
+    public static void info(@Nullable Object message) {
         if(message == null)
             return;
 
         out("INFO", message);
     }
 
-    public static void warn(Object message) {
+    public static void warn(@Nullable Object message) {
         if(message == null)
             return;
 
         out("WARN", message);
     }
 
-    public static void debug(Object message) {
+    public static void debug(@Nullable Object message) {
         if(message == null || !SimpleCupBuilder.DEBUG)
             return;
 
         out("DEBUG", message);
     }
 
-    public static void trace(Object caller, Object message) {
+    public static void trace(@Nullable Object caller, @Nullable Object message) {
         if(message == null || !SimpleCupBuilder.DEBUG)
             return;
 
         out("TRACE", "Message from " + caller + ": " + message);
     }
 
-    public static void error(Object message) {
+    public static void error(@Nullable Object message) {
         if(message == null)
             return;
 
         err("ERROR", message);
     }
 
-    public static void exception(Exception e) {
+    public static void exception(@NotNull Exception e) {
         synchronized(syncObj) {
             e.printStackTrace();
             e.printStackTrace(errStream);
@@ -86,7 +88,7 @@ public final class Log {
         }
     }
 
-    public static void fatal(int code, Object message) {
+    public static void fatal(int code, @NotNull Object message) {
         err("FATAL", message);
 
         outStream.close();
@@ -95,7 +97,7 @@ public final class Log {
         System.exit(code);
     }
 
-    public static void print(Object message) {
+    public static void print(@Nullable Object message) {
         if(message == null)
             return;
 
@@ -107,7 +109,7 @@ public final class Log {
         }
     }
 
-    public static void printErr(Object message) {
+    public static void printErr(@Nullable Object message) {
         if(message == null)
             return;
 
@@ -119,15 +121,16 @@ public final class Log {
         }
     }
 
-    private static void out(String header, Object message) {
+    private static void out(@NotNull String header, @NotNull Object message) {
         print(addHeader(header) + message);
     }
 
-    private static void err(String header, Object message) {
+    private static void err(@NotNull String header, @NotNull Object message) {
         printErr(addHeader(header) + message);
     }
 
-    private static String addHeader(String name) {
+    @NotNull
+    private static String addHeader(@NotNull String name) {
         return "[" + dateFormat.format(new Date()) + " / " + name + "]: ";
     }
 }

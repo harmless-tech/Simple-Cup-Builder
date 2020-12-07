@@ -1,5 +1,6 @@
 package tech.harmless.simplecupbuilder.data.cache;
 
+import org.jetbrains.annotations.NotNull;
 import tech.harmless.simplecupbuilder.utils.EmptyTypes;
 import tech.harmless.simplecupbuilder.utils.Log;
 
@@ -28,14 +29,12 @@ public final class CacheIO {
 
     // Cache manipulation.
 
-    public static void addDrink(String id) {
-        if(id != null) {
-            CacheData data = new CacheData(id);
+    public static void addDrink(@NotNull String id) {
+        CacheData data = new CacheData(id);
 
-            synchronized(syncObj) {
-                if(!cache.containsKey(id))
-                    cache.put(id, data);
-            }
+        synchronized(syncObj) {
+            if(!cache.containsKey(id))
+                cache.put(id, data);
         }
     }
 
@@ -64,43 +63,38 @@ public final class CacheIO {
     }
 
     //TODO Export.
-    public static void setDrinkFileHash(String id, String hash) {
-        if(id != null && hash != null) {
-            synchronized(syncObj) {
-                CacheData data = cache.get(id);
+    public static void setDrinkFileHash(@NotNull String id, @NotNull String hash) {
+        synchronized(syncObj) {
+            CacheData data = cache.get(id);
 
-                if(data != null)
-                    data.fileHash = hash;
-                else
-                    Log.error("Drink " + id + " is not in the cache, but something tried to change the file hash.");
-            }
+            if(data != null)
+                data.fileHash = hash;
+            else
+                Log.error("Drink " + id + " is not in the cache, but something tried to change the file hash.");
         }
     }
 
     //TODO Export.
-    public static void setDrinkCommitHash(String id, String hash) {
-        if(id != null && hash != null) {
-            synchronized(syncObj) {
-                CacheData data = cache.get(id);
+    public static void setDrinkCommitHash(@NotNull String id, @NotNull String hash) {
+        synchronized(syncObj) {
+            CacheData data = cache.get(id);
 
-                if(data != null)
-                    data.commitHash = hash;
-                else
-                    Log.error("Drink " + id + " is not in the cache, but something tried to change the commit hash.");
-            }
+            if(data != null)
+                data.commitHash = hash;
+            else
+                Log.error("Drink " + id + " is not in the cache, but something tried to change the commit hash.");
         }
     }
 
-    public static String getDrinkCommitHash(String id) {
-        if(id != null) {
-            synchronized(syncObj) {
-                CacheData data = cache.get(id);
+    @NotNull
+    public static String getDrinkCommitHash(@NotNull String id) {
+        synchronized(syncObj) {
+            CacheData data = cache.get(id);
 
-                if(data != null)
-                    return data.commitHash;
-                else
-                    Log.error("Drink " + id + " is not in the cache, but something tried to get the commit hash.");
-            }
+            if(data != null)
+                return data.commitHash;
+            else
+                Log.error("Drink " + id + " is not in the cache, but something tried to get the commit hash.");
         }
 
         return EmptyTypes.STRING;

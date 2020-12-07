@@ -33,7 +33,7 @@ dependencies {
 
     compileOnly group: "org.jetbrains", name: "annotations", version: "20.1.0"
     annotationProcessor group: "org.jetbrains", name: "annotations", version: "20.1.0"
-
+    
     compileOnly group: "com.github.spotbugs", name: "spotbugs-annotations", version: "4.2.0"
     annotationProcessor group: "com.github.spotbugs", name: "spotbugs-annotations", version: "4.2.0"
 

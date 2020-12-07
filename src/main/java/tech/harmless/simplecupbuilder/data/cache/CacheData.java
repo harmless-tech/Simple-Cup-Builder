@@ -1,5 +1,7 @@
 package tech.harmless.simplecupbuilder.data.cache;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ class CacheData {
     protected boolean lastBuildSuccess;
     protected List<String> archiveNames;
 
-    public CacheData(String id) {
+    public CacheData(@NotNull String id) {
         this.id = id;
 
         this.name = "";

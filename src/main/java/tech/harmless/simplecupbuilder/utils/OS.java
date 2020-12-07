@@ -1,5 +1,7 @@
 package tech.harmless.simplecupbuilder.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 public final class OS {
 
     public enum EnumOS {
@@ -20,6 +22,7 @@ public final class OS {
         return EnumOS.LINUX; // Defaults to Linux.
     }
 
+    @NotNull
     public static String getPathName() {
         EnumOS os = getOs();
 

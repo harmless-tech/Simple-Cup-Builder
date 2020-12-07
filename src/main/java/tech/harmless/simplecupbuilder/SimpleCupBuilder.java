@@ -1,5 +1,6 @@
 package tech.harmless.simplecupbuilder;
 
+import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 import tech.harmless.simplecupbuilder.build.BuildManager;
 import tech.harmless.simplecupbuilder.utils.Log;
 import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
@@ -98,6 +99,7 @@ public class SimpleCupBuilder {
                 }
                 case "--gui" -> Log.info("GUI not supported yet."); //TODO GUI later.
                 case "--nothing" -> Log.info("Nothing happened...");
+                default -> Log.info("No args.");
             }
         }
 
@@ -160,11 +162,11 @@ public class SimpleCupBuilder {
     }
 
     private static void createDirs() {
-        new File(DATA_DIR).mkdirs();
-        new File(INTERNAL_DIR).mkdirs();
-        new File(CACHE_DIR).mkdirs();
-        new File(BUILD_DIR).mkdirs();
-        new File(ARCHIVE_DIR).mkdirs();
-        new File(TMP_DIR).mkdirs();
+        boolean ignored = new File(DATA_DIR).mkdirs();
+        ignored = new File(INTERNAL_DIR).mkdirs();
+        ignored = new File(CACHE_DIR).mkdirs();
+        ignored = new File(BUILD_DIR).mkdirs();
+        ignored = new File(ARCHIVE_DIR).mkdirs();
+        ignored = new File(TMP_DIR).mkdirs();
     }
 }

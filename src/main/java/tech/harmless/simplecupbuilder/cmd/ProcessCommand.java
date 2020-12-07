@@ -1,5 +1,7 @@
 package tech.harmless.simplecupbuilder.cmd;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tech.harmless.simplecupbuilder.utils.Log;
 import tech.harmless.simplecupbuilder.utils.OS;
 import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
@@ -21,20 +23,12 @@ public final class ProcessCommand {
 
     //TODO Better way for cmdLine?
     //TODO Refactor!
-    public static FinalTuple<Integer, String> run(String cmdLine, String command, String wrkDir, String[] addPath,
-                                                  Map<String, String> addEnv) {
-        if(cmdLine == null || command == null || wrkDir == null)
-            return errTuple;
-
+    @NotNull
+    public static FinalTuple<Integer, String> run(@NotNull String cmdLine, @NotNull String command,
+                                                  @NotNull String wrkDir, @NotNull String[] addPath,
+                                                  @Nullable Map<String, String> addEnv) {
         File workDir = new File(wrkDir);
-        workDir.mkdirs();
-
-        /*if(command.startsWith(".") || command.startsWith("/") || command.startsWith("\\")) {
-            if(command.startsWith("."))
-                command = command.substring(1);
-
-            command = workDir.getAbsolutePath().substring(0, workDir.getAbsolutePath().length() - 2) + command;
-        }*/
+        boolean ignored = workDir.mkdirs();
 
         List<String> cmd = new ArrayList<>();
         if(OS.getOs() == OS.EnumOS.WINDOWS) //TODO Add support for other OS shells.

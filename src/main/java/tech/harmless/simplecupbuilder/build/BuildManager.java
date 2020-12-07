@@ -1,5 +1,6 @@
 package tech.harmless.simplecupbuilder.build;
 
+import org.jetbrains.annotations.NotNull;
 import tech.harmless.simplecupbuilder.SimpleCupBuilder;
 import tech.harmless.simplecupbuilder.cmd.GitCommand;
 import tech.harmless.simplecupbuilder.cmd.ProcessCommand;
@@ -69,6 +70,8 @@ public class BuildManager implements Runnable {
 
         // Setup
         importData();
+        if(cupData == null)
+            return;
 
         // Setup the update timer.
         ScheduledExecutorService se = Executors.newScheduledThreadPool(1);
@@ -306,7 +309,7 @@ public class BuildManager implements Runnable {
         return r;
     }
 
-    private void startBuild(String id) {
+    private void startBuild(@NotNull String id) {
         Log.info("Starting build of drink " + id + "...");
 
         DrinkData drink;

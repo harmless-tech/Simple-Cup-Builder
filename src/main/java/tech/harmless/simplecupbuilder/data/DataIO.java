@@ -3,6 +3,9 @@ package tech.harmless.simplecupbuilder.data;
 import com.github.jezza.Toml;
 import com.github.jezza.TomlArray;
 import com.github.jezza.TomlTable;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tech.harmless.simplecupbuilder.SimpleCupBuilder;
 import tech.harmless.simplecupbuilder.utils.EmptyTypes;
 import tech.harmless.simplecupbuilder.utils.Log;
@@ -18,6 +21,8 @@ import java.io.IOException;
 public final class DataIO {
 
     @SuppressWarnings("Duplicates")
+    @Nullable
+    @CheckForNull
     public static CupData processCup() {
         try {
             CupData data = new CupData();
@@ -65,7 +70,9 @@ public final class DataIO {
 
     // Returns drink data and the hash of the file.
     @SuppressWarnings("Duplicates")
-    public static FinalTuple<DrinkData, String> processDrink(String namePath) {
+    @Nullable
+    @CheckForNull
+    public static FinalTuple<DrinkData, String> processDrink(@NotNull String namePath) {
         try {
             DrinkData data = new DrinkData();
 
@@ -174,7 +181,9 @@ public final class DataIO {
     }
 
     @SuppressWarnings("Duplicates")
-    public static FinalTuple<DrinkData, String> processInternalDrink(DrinkData drink) {
+    @Nullable
+    @CheckForNull
+    public static FinalTuple<DrinkData, String> processInternalDrink(@NotNull DrinkData drink) {
         try {
             DrinkData data = new DrinkData();
 
@@ -304,7 +313,8 @@ public final class DataIO {
                 Log.error("Drink file " + drink.getGit_internal_build_file() + " does not exist.");
         }
         catch(IOException | ClassCastException e) {
-            Log.error("Failed to import internal drink file " + drink.getGit_internal_build_file() + " and process it.");
+            Log.error(
+                    "Failed to import internal drink file " + drink.getGit_internal_build_file() + " and process it.");
             Log.exception(e);
         }
 
