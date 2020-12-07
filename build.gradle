@@ -24,23 +24,19 @@ dependencies {
     implementation group: "com.github.jezza", name: "toml", version: "1.2"
     implementation group: "com.google.code.gson", name: "gson", version: "2.8.6"
 
-    // JGit was acting weird and it does not have module support.
-    //implementation group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '5.9.0.202009080501-r'
-
     // Annotations
     compileOnly group: "org.projectlombok", name: "lombok", version: "1.18.16"
     annotationProcessor group: "org.projectlombok", name: "lombok", version: "1.18.16"
 
     compileOnly group: "org.jetbrains", name: "annotations", version: "20.1.0"
     annotationProcessor group: "org.jetbrains", name: "annotations", version: "20.1.0"
-    
+
     compileOnly group: "com.github.spotbugs", name: "spotbugs-annotations", version: "4.2.0"
     annotationProcessor group: "com.github.spotbugs", name: "spotbugs-annotations", version: "4.2.0"
 
     // Bugs
     spotbugs group: "com.github.spotbugs", name: "spotbugs", version: "4.2.0"
-    // This plugin errors and complains about missing classes.
-    //spotbugsPlugins group: "com.h3xstream.findsecbugs", name: "findsecbugs-plugin", version: "1.11.0"
+    spotbugsPlugins group: "com.h3xstream.findsecbugs", name: "findsecbugs-plugin", version: "1.11.0"
 
     // Tests
     testImplementation group: "org.junit.jupiter", name: "junit-jupiter-api", version: "5.7.0"
@@ -51,6 +47,10 @@ plugins.withType(JavaPlugin).configureEach {
     java {
         modularity.inferModulePath = true
     }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 buildConfig {
@@ -93,7 +93,7 @@ jar {
 application {
     mainModule = "tech.harmless.simplecupbuilder"
     mainClass = "tech.harmless.simplecupbuilder.SimpleCupBuilder"
-    applicationDefaultJvmArgs = ["-Dfile.encoding=utf-8", "-Xmx2048m"]
+    applicationDefaultJvmArgs = ["-Dfile.encoding=UTF-8", "-Xmx2048m"]
 }
 
 task debug {
@@ -113,7 +113,7 @@ task debug {
 
 spotbugs {
     showProgress = true
-    onlyAnalyze = ["tech.harmless.simplecupbuilder.*"]
+    ignoreFailures = true
 }
 
 spotbugsMain {

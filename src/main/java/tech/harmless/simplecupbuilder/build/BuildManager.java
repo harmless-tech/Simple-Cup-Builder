@@ -46,7 +46,6 @@ public class BuildManager implements Runnable {
     private final Object buildSync = new Object();
 
     private boolean shouldRun;
-    private boolean building;
     private Date buildStartTime;
     private Thread masterBuildThread; //TODO Use async instead of threads? //TODO Allow multiple (parallel) builds?
     private List<Thread> buildThreads; //TODO Use async instead of threads? //TODO Allow multiple (parallel) builds?
@@ -60,7 +59,6 @@ public class BuildManager implements Runnable {
     public void run() {
         // Init
         shouldRun = true;
-        building = false;
         buildStartTime = new Date(0L);
         masterBuildThread = new Thread();
         buildThreads = new ArrayList<>();

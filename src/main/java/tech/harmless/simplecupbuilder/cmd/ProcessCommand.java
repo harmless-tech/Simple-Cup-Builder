@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +29,8 @@ public final class ProcessCommand {
                                                   @NotNull String wrkDir, @NotNull String[] addPath,
                                                   @Nullable Map<String, String> addEnv) {
         File workDir = new File(wrkDir);
-        boolean ignored = workDir.mkdirs();
+        if(!workDir.mkdirs()) //TODO Check exist has well.
+            Log.info(wrkDir + " could not be created. Assuming that it already exists.");
 
         List<String> cmd = new ArrayList<>();
         if(OS.getOs() == OS.EnumOS.WINDOWS) //TODO Add support for other OS shells.
@@ -52,13 +54,15 @@ public final class ProcessCommand {
             Process p = builder.start();
             p.onExit().join();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader reader =
+                    new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8));
             StringBuilder strBuilder = new StringBuilder();
             String line;
             while((line = reader.readLine()) != null) {
                 strBuilder.append(line);
                 strBuilder.append(System.getProperty("line.separator"));
             }
+            reader.close();
 
             return new FinalTuple<>(p.exitValue(), strBuilder.toString());
         }

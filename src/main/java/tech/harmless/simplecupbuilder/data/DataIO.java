@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 //TODO Less dup.
 public final class DataIO {
@@ -29,7 +30,7 @@ public final class DataIO {
 
             File f = new File(SimpleCupBuilder.CUP_FILE);
             if(f.exists()) {
-                BufferedReader br = new BufferedReader(new FileReader(f));
+                BufferedReader br = new BufferedReader(new FileReader(f, StandardCharsets.UTF_8));
                 TomlTable root = Toml.from(br);
 
                 data.options_gitUpdateTimer = (long) root.getOrDefault("options.git_update_timer", 15L);
@@ -79,7 +80,7 @@ public final class DataIO {
             File f = new File(SimpleCupBuilder.DATA_DIR + namePath + SimpleCupBuilder.CONFIG_FILE_EXT);
             if(f.exists()) {
                 // Drink Data
-                BufferedReader br = new BufferedReader(new FileReader(f));
+                BufferedReader br = new BufferedReader(new FileReader(f, StandardCharsets.UTF_8));
                 TomlTable root = Toml.from(br);
 
                 data.drinkInfo_name = (String) root.getOrDefault("drink_info.name", EmptyTypes.STRING);
@@ -158,12 +159,14 @@ public final class DataIO {
                 data.aliasMap = null;
 
                 // Hash
-                br = new BufferedReader(new FileReader(f));
+                br = new BufferedReader(new FileReader(f, StandardCharsets.UTF_8));
                 StringBuilder sb = new StringBuilder();
                 String line;
 
                 while((line = br.readLine()) != null)
                     sb.append(line);
+
+                br.close();
 
                 String hash = Security.unsecureSha512(sb.toString());
 
@@ -191,7 +194,7 @@ public final class DataIO {
                     SimpleCupBuilder.BUILD_DIR + drink.getGit_internal_build_file() + SimpleCupBuilder.CONFIG_FILE_EXT);
             if(f.exists()) {
                 // Drink Data
-                BufferedReader br = new BufferedReader(new FileReader(f));
+                BufferedReader br = new BufferedReader(new FileReader(f, StandardCharsets.UTF_8));
                 TomlTable root = Toml.from(br);
 
                 data.archive_format = (String) root.getOrDefault("archive.format", "zip");
@@ -263,12 +266,14 @@ public final class DataIO {
                 data.aliasMap = null;
 
                 // Hash
-                br = new BufferedReader(new FileReader(f));
+                br = new BufferedReader(new FileReader(f, StandardCharsets.UTF_8));
                 StringBuilder sb = new StringBuilder();
                 String line;
 
                 while((line = br.readLine()) != null)
                     sb.append(line);
+
+                br.close();
 
                 String hash = Security.unsecureSha512(sb.toString());
 

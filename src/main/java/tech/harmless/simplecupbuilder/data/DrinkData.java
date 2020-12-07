@@ -1,9 +1,11 @@
 package tech.harmless.simplecupbuilder.data;
 
 import lombok.Getter;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Map;
 
+//TODO Make these all final.
 public class DrinkData {
 
     // --- drink_info ---
@@ -80,9 +82,11 @@ public class DrinkData {
 
     // --- add_env ---
     @Getter
+    @Unmodifiable
     protected Map<String, String> envMap;
 
     // --- alias ---
     @Getter
+    @Unmodifiable
     protected Map<String, String> aliasMap;
 }

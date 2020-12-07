@@ -162,6 +162,7 @@ public class SimpleCupBuilder {
     }
 
     private static void createDirs() {
+        //TODO Check exist too.
         boolean ignored = new File(DATA_DIR).mkdirs();
         ignored = new File(INTERNAL_DIR).mkdirs();
         ignored = new File(CACHE_DIR).mkdirs();

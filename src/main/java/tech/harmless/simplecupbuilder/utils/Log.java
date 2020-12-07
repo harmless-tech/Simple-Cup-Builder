@@ -1,5 +1,6 @@
 package tech.harmless.simplecupbuilder.utils;
 
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tech.harmless.simplecupbuilder.SimpleCupBuilder;
@@ -8,6 +9,7 @@ import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -21,11 +23,11 @@ public final class Log {
 
     static {
         try {
-            outStream = new PrintStream(SimpleCupBuilder.LOG_FILE);
+            outStream = new PrintStream(SimpleCupBuilder.LOG_FILE, StandardCharsets.UTF_8);
             outStream.println("Out logging init at " + new Date() + ".");
             outStream.flush();
 
-            errStream = new PrintStream(SimpleCupBuilder.LOG_ERR_FILE);
+            errStream = new PrintStream(SimpleCupBuilder.LOG_ERR_FILE, StandardCharsets.UTF_8);
             errStream.println("Err logging init at " + new Date() + ".");
             errStream.flush();
         }
@@ -88,7 +90,7 @@ public final class Log {
         }
     }
 
-    public static void fatal(int code, @NotNull Object message) {
+    public static void fatal(@MagicConstant(flagsFromClass = EnumExitCodes.class) int code, @NotNull Object message) {
         err("FATAL", message);
 
         outStream.close();
@@ -131,6 +133,8 @@ public final class Log {
 
     @NotNull
     private static String addHeader(@NotNull String name) {
-        return "[" + dateFormat.format(new Date()) + " / " + name + "]: ";
+        synchronized(dateFormat) {
+            return "[" + dateFormat.format(new Date()) + " / " + name + "]: ";
+        }
     }
 }
