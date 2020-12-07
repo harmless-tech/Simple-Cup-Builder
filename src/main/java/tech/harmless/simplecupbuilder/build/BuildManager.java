@@ -8,9 +8,9 @@ import tech.harmless.simplecupbuilder.data.CupData;
 import tech.harmless.simplecupbuilder.data.DataIO;
 import tech.harmless.simplecupbuilder.data.DrinkData;
 import tech.harmless.simplecupbuilder.data.cache.CacheIO;
-import tech.harmless.simplecupbuilder.utils.EmptyTypes;
 import tech.harmless.simplecupbuilder.utils.Log;
 import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
+import tech.harmless.simplecupbuilder.utils.types.EmptyTypes;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,32 +25,20 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-/*
- * Setup cup options.
- * Setup cache.
- * Import drink files.
- *
- * Timer -> TIME
- * Git check status.
- * Git pull.
- * Git update commit hash.
- * Start build process.
- */
 public class BuildManager implements Runnable {
 
     public final Object monitorObject = new Object();
-    public final Queue<String> cmdQueue = new ConcurrentLinkedQueue<>(); // Auto synced. No need to use sync obj.
     //TODO Switch to a custom cmd object. Put parser in Console file.
+    public final Queue<String> cmdQueue = new ConcurrentLinkedQueue<>(); // Auto synced. No need to use sync obj.
     public boolean signaled = false;
 
     private final Object buildSync = new Object();
 
     private boolean shouldRun;
     private Date buildStartTime;
-    private Thread masterBuildThread; //TODO Use async instead of threads? //TODO Allow multiple (parallel) builds?
-    private List<Thread> buildThreads; //TODO Use async instead of threads? //TODO Allow multiple (parallel) builds?
+    private Thread masterBuildThread;
+    private List<Thread> buildThreads;
     //TODO Something to talk to the user console.
-    //TODO A timer of sorts.
 
     private CupData cupData;
     private Map<String, DrinkData> drinks;
@@ -97,9 +85,6 @@ public class BuildManager implements Runnable {
                 else
                     Log.warn("Master Build Thread is still alive and so new builds cannot be done." +
                             " Maybe consider making the git update timer longer.");
-
-                //TODO Do build stuff.
-                //TODO If builds are occurring still skip.
             }
 
             // Wait until this thread is notified of a change.
@@ -136,21 +121,19 @@ public class BuildManager implements Runnable {
         Log.info("Successfully imported cup.");
 
         //TODO Check for repeating files. They should throw a fatal error.
-        //TODO Check drink file hash and compare to see if it should be updated.
         String[] drinkFileNames = cupData.getOptions_drinks();
 
         // Import drinks async.
-        List<CompletableFuture<FinalTuple<DrinkData, String>>> async = new ArrayList<>();
+        List<CompletableFuture<DrinkData>> async = new ArrayList<>();
 
         for(int i = 0; i < drinkFileNames.length; i++) {
             final int ai = i;
             async.add(CompletableFuture.supplyAsync(() -> DataIO.processDrink(drinkFileNames[ai])));
         }
 
-        for(CompletableFuture<FinalTuple<DrinkData, String>> fut : async) {
-            FinalTuple<DrinkData, String> tuple = fut.join();
-            if(tuple.getX() != null) {
-                DrinkData data = tuple.getX();
+        for(CompletableFuture<DrinkData> fut : async) {
+            DrinkData data = fut.join();
+            if(data != null) {
                 drinks.put(data.getDrinkInfo_id(), data);
 
                 Log.info("Successfully imported drink " + data.getDrinkInfo_id() + ".");
@@ -159,7 +142,6 @@ public class BuildManager implements Runnable {
 
                 // Add to cache, if its not there already.
                 CacheIO.addDrink(data.getDrinkInfo_id());
-                CacheIO.setDrinkFileHash(data.getDrinkInfo_id(), tuple.getY());
             }
             else
                 Log.error("Drink data failed to import.");

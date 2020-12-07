@@ -1,8 +1,8 @@
 package tech.harmless.simplecupbuilder.data.cache;
 
 import org.jetbrains.annotations.NotNull;
-import tech.harmless.simplecupbuilder.utils.EmptyTypes;
 import tech.harmless.simplecupbuilder.utils.Log;
+import tech.harmless.simplecupbuilder.utils.types.EmptyTypes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,18 +60,6 @@ public final class CacheIO {
         }
 
         return EmptyTypes.STRING_ARRAY;
-    }
-
-    //TODO Export.
-    public static void setDrinkFileHash(@NotNull String id, @NotNull String hash) {
-        synchronized(syncObj) {
-            CacheData data = cache.get(id);
-
-            if(data != null)
-                data.fileHash = hash;
-            else
-                Log.error("Drink " + id + " is not in the cache, but something tried to change the file hash.");
-        }
     }
 
     //TODO Export.

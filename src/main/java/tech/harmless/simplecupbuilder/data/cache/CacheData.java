@@ -10,11 +10,6 @@ class CacheData {
 
     protected final String id;
 
-    // General Info
-    protected String name;
-    protected String fileHash; //TODO Is this even needed? maybe use to update while the program is running?
-    //protected String iFileHash; //TODO Allow for internal files to be hashed.
-
     // Build Info
     protected String commitHash;
     protected int buildNumber;
@@ -23,10 +18,6 @@ class CacheData {
 
     public CacheData(@NotNull String id) {
         this.id = id;
-
-        this.name = "";
-        this.fileHash = "";
-        //this.iFileHash = "";
 
         commitHash = "";
         buildNumber = -1;

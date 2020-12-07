@@ -4,8 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tech.harmless.simplecupbuilder.utils.Log;
 import tech.harmless.simplecupbuilder.utils.OS;
-import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
 import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
+import tech.harmless.simplecupbuilder.utils.types.ExitCodes;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,7 +22,6 @@ public final class ProcessCommand {
     private static final FinalTuple<Integer, String> errTuple =
             new FinalTuple<>(Integer.MIN_VALUE, "FATAL - COMMAND FAILED");
 
-    //TODO Better way for cmdLine?
     //TODO Refactor!
     @NotNull
     public static FinalTuple<Integer, String> run(@NotNull String cmdLine, @NotNull String command,
@@ -68,7 +67,7 @@ public final class ProcessCommand {
         }
         catch(IOException e) {
             Log.exception(e);
-            Log.fatal(EnumExitCodes.PROCESS_START_FAILURE, "Failure when starting a process!");
+            Log.fatal(ExitCodes.PROCESS_START_FAILURE, "Failure when starting a process!");
         }
 
         return errTuple;

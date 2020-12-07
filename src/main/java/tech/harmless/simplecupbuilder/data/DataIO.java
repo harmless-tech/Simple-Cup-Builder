@@ -7,10 +7,8 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tech.harmless.simplecupbuilder.SimpleCupBuilder;
-import tech.harmless.simplecupbuilder.utils.EmptyTypes;
 import tech.harmless.simplecupbuilder.utils.Log;
-import tech.harmless.simplecupbuilder.utils.Security;
-import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
+import tech.harmless.simplecupbuilder.utils.types.EmptyTypes;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -73,7 +71,7 @@ public final class DataIO {
     @SuppressWarnings("Duplicates")
     @Nullable
     @CheckForNull
-    public static FinalTuple<DrinkData, String> processDrink(@NotNull String namePath) {
+    public static DrinkData processDrink(@NotNull String namePath) {
         try {
             DrinkData data = new DrinkData();
 
@@ -158,19 +156,7 @@ public final class DataIO {
                 //TODO Alias.
                 data.aliasMap = null;
 
-                // Hash
-                br = new BufferedReader(new FileReader(f, StandardCharsets.UTF_8));
-                StringBuilder sb = new StringBuilder();
-                String line;
-
-                while((line = br.readLine()) != null)
-                    sb.append(line);
-
-                br.close();
-
-                String hash = Security.unsecureSha512(sb.toString());
-
-                return new FinalTuple<>(data, hash);
+                return data;
             }
             else
                 Log.error("Drink file " + namePath + " does not exist.");
@@ -186,7 +172,7 @@ public final class DataIO {
     @SuppressWarnings("Duplicates")
     @Nullable
     @CheckForNull
-    public static FinalTuple<DrinkData, String> processInternalDrink(@NotNull DrinkData drink) {
+    public static DrinkData processInternalDrink(@NotNull DrinkData drink) {
         try {
             DrinkData data = new DrinkData();
 
@@ -265,18 +251,6 @@ public final class DataIO {
                 //TODO Alias.
                 data.aliasMap = null;
 
-                // Hash
-                br = new BufferedReader(new FileReader(f, StandardCharsets.UTF_8));
-                StringBuilder sb = new StringBuilder();
-                String line;
-
-                while((line = br.readLine()) != null)
-                    sb.append(line);
-
-                br.close();
-
-                String hash = Security.unsecureSha512(sb.toString());
-
                 // Move data vars to drink.
                 drink.archive_format = data.archive_format;
                 drink.archive_limit = data.archive_limit;
@@ -312,7 +286,7 @@ public final class DataIO {
                 //TODO Alias.
                 data.aliasMap = null;
 
-                return new FinalTuple<>(drink, hash);
+                return drink;
             }
             else
                 Log.error("Drink file " + drink.getGit_internal_build_file() + " does not exist.");

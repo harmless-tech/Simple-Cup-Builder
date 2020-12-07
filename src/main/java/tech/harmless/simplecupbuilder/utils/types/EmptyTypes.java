@@ -1,4 +1,4 @@
-package tech.harmless.simplecupbuilder.utils;
+package tech.harmless.simplecupbuilder.utils.types;
 
 import com.github.jezza.TomlArray;
 

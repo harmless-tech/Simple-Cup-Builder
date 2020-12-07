@@ -1,6 +1,7 @@
 package tech.harmless.simplecupbuilder.build;
 
-//TODO Maybe use Async instead of threads?
+//TODO Async instead of Thread?
+//TODO Move build stuff from BuildManager to this class!
 public class Builder implements Runnable {
 
     public Builder() {

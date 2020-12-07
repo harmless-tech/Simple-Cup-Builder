@@ -1,4 +1,5 @@
 # CupData: Example cup config file.
+#TODO Add some way to validate internal build files. Like a pub/priv keys.
 
 [options]
 git_update_timer = 15 # In minutes.
@@ -11,8 +12,8 @@ drinks = [
 
 [process]
 windows = "pwsh /c" # Options: cmd /c, pwsh /c, or others (If pwsh is installed and on the path)
-#linux = "" TODO Remove or keep?
-#macos = "" TODO Remove or keep?
+#linux = "" TODO Remove or keep? Implement!
+#macos = "" TODO Remove or keep? Implement!
 
 [add_path]
 windows = [

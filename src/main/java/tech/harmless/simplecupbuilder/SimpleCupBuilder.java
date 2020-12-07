@@ -1,9 +1,8 @@
 package tech.harmless.simplecupbuilder;
 
-import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 import tech.harmless.simplecupbuilder.build.BuildManager;
 import tech.harmless.simplecupbuilder.utils.Log;
-import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
+import tech.harmless.simplecupbuilder.utils.types.ExitCodes;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -77,13 +76,13 @@ public class SimpleCupBuilder {
 
             if(lock == null) {
                 System.err.println("Could not create instance lock! Currently held by another program!");
-                System.exit(EnumExitCodes.LOCK_SETUP_FAILURE);
+                System.exit(ExitCodes.LOCK_SETUP_FAILURE);
             }
         }
         catch(IOException e) {
             System.err.println("Could not create instance lock!");
             e.printStackTrace();
-            System.exit(EnumExitCodes.LOCK_SETUP_FAILURE);
+            System.exit(ExitCodes.LOCK_SETUP_FAILURE);
         }
 
         // After
@@ -157,7 +156,7 @@ public class SimpleCupBuilder {
         catch(IOException e) {
             System.err.println("Could not release instance lock!");
             e.printStackTrace();
-            System.exit(EnumExitCodes.LOCK_RELEASE_FAILURE);
+            System.exit(ExitCodes.LOCK_RELEASE_FAILURE);
         }
     }
 

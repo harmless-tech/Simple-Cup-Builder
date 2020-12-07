@@ -4,8 +4,8 @@ import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tech.harmless.simplecupbuilder.SimpleCupBuilder;
-import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
 import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
+import tech.harmless.simplecupbuilder.utils.types.ExitCodes;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -34,7 +34,7 @@ public final class Log {
         catch(IOException e) {
             System.err.println("Could not setup loggers!");
             e.printStackTrace();
-            System.exit(EnumExitCodes.LOG_SETUP_FAILURE);
+            System.exit(ExitCodes.LOG_SETUP_FAILURE);
         }
     }
 
@@ -90,7 +90,7 @@ public final class Log {
         }
     }
 
-    public static void fatal(@MagicConstant(flagsFromClass = EnumExitCodes.class) int code, @NotNull Object message) {
+    public static void fatal(@MagicConstant(flagsFromClass = ExitCodes.class) int code, @NotNull Object message) {
         err("FATAL", message);
 
         outStream.close();

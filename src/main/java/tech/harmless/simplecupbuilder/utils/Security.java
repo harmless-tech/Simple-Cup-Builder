@@ -1,7 +1,7 @@
 package tech.harmless.simplecupbuilder.utils;
 
 import org.jetbrains.annotations.NotNull;
-import tech.harmless.simplecupbuilder.utils.enums.EnumExitCodes;
+import tech.harmless.simplecupbuilder.utils.types.ExitCodes;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -23,7 +23,7 @@ public final class Security {
         }
         catch(NoSuchAlgorithmException e) {
             Log.exception(e);
-            Log.fatal(EnumExitCodes.NO_HASH, "The hashing algorithm SHA-256 does not exist.");
+            Log.fatal(ExitCodes.NO_HASH, "The hashing algorithm SHA-256 does not exist.");
         }
 
         return generated;

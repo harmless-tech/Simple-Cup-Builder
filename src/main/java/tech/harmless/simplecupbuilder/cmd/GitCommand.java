@@ -2,12 +2,11 @@ package tech.harmless.simplecupbuilder.cmd;
 
 import org.jetbrains.annotations.NotNull;
 import tech.harmless.simplecupbuilder.SimpleCupBuilder;
-import tech.harmless.simplecupbuilder.utils.EmptyTypes;
 import tech.harmless.simplecupbuilder.utils.Log;
 import tech.harmless.simplecupbuilder.utils.tuples.FinalTuple;
+import tech.harmless.simplecupbuilder.utils.types.EmptyTypes;
 
-//TODO Better error reporting? (EnumStatus)
-//TODO Make things less repetitive.
+//TODO Make the cmdline dynamic.
 public final class GitCommand {
 
     public static boolean clone(@NotNull String id, @NotNull String url) {
@@ -18,7 +17,6 @@ public final class GitCommand {
         Log.process("Git Clone", cReturn);
 
         return cReturn.getX() == 0;
-
     }
 
     public static boolean checkout(@NotNull String id, @NotNull String branch) {
@@ -29,7 +27,6 @@ public final class GitCommand {
         Log.process("Git Checkout", cReturn);
 
         return cReturn.getX() == 0;
-
     }
 
     public static boolean submoduleInit(@NotNull String id) {
@@ -40,7 +37,6 @@ public final class GitCommand {
         Log.process("Git Submodule", cReturn);
 
         return cReturn.getX() == 0;
-
     }
 
     public static boolean fetch(@NotNull String id) {
@@ -51,7 +47,6 @@ public final class GitCommand {
         Log.process("Git Fetch", cReturn);
 
         return cReturn.getX() == 0;
-
     }
 
     public static boolean pull(@NotNull String id, @NotNull String branch) {
@@ -62,7 +57,6 @@ public final class GitCommand {
         Log.process("Git Pull", cReturn);
 
         return cReturn.getX() == 0;
-
     }
 
     // If status fails then there is no git repo.
@@ -74,7 +68,6 @@ public final class GitCommand {
         Log.process("Git Status", cReturn);
 
         return cReturn.getX() == 0;
-
     }
 
     @NotNull
