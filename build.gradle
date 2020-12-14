@@ -1,3 +1,5 @@
+import org.gradle.internal.os.OperatingSystem
+
 plugins {
     id "java"
     id "idea"
@@ -6,6 +8,7 @@ plugins {
     id "com.github.gmazzo.buildconfig" version "2.0.2"
     id "com.github.johnrengelman.shadow" version "6.1.0"
     id "com.github.spotbugs" version "4.6.0"
+    id "org.beryx.jlink" version "2.22.3"
 }
 
 group "tech.harmless.simplecupbuilder"
@@ -13,6 +16,23 @@ version "0.0.1-ALPHA"
 
 sourceCompatibility = 15
 targetCompatibility = 15
+
+buildConfig {
+    className("BuildConfig")
+    packageName("tech.harmless.simplecupbuilder")
+
+    buildConfigField("String", "NAME", "\"${rootProject.name}\"")
+    buildConfigField("String", "VERSION", "\"${version}\"")
+    buildConfigField("String", "AUTHOR_NAME", "\"Harmless_Tech\"")
+    buildConfigField("String", "BUILD_TIME", "\"${new Date()}\"")
+
+    sourceSets.getByName("test") {
+        className("BuildConfig")
+        packageName("tests")
+
+        buildConfigField("String", "TEST", "\"Test\"")
+    }
+}
 
 repositories {
     mavenCentral()
@@ -53,24 +73,7 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-buildConfig {
-    className("BuildConfig")
-    packageName("tech.harmless.simplecupbuilder")
-
-    buildConfigField("String", "NAME", "\"${rootProject.name}\"")
-    buildConfigField("String", "VERSION", "\"${version}\"")
-    buildConfigField("String", "AUTHOR_NAME", "\"Harmless_Tech\"")
-    buildConfigField("String", "BUILD_TIME", "\"${new Date()}\"")
-
-    sourceSets.getByName("test") {
-        className("BuildConfig")
-        packageName("tests")
-
-        buildConfigField("String", "TEST", "\"Test\"")
-    }
-}
-
-mainClassName = "tech.harmless.simplecupbuilder.SimpleCupBuilder"
+mainClassName = project.group + ".SimpleCupBuilder"
 
 task copyDeps(type: Copy) {
     from configurations.runtimeClasspath
@@ -82,17 +85,14 @@ jar {
 
     manifest {
         attributes(
-                "Implementation-Title": "Gradle",
-                "Implementation-Version": archiveVersion,
-                "Main-Class": "tech.harmless.simplecupbuilder.SimpleCupBuilder",
-                "Class-Path": configurations.compileClasspath.collect { it.getName() }.join(" ")
+                "Main-Class": project.mainClassName
         )
     }
 }
 
 application {
-    mainModule = "tech.harmless.simplecupbuilder"
-    mainClass = "tech.harmless.simplecupbuilder.SimpleCupBuilder"
+    mainModule.set(project.group as String)
+    mainClass.set(project.mainClassName)
     applicationDefaultJvmArgs = ["-Dfile.encoding=UTF-8", "-Xmx2048m"]
 }
 
@@ -112,8 +112,8 @@ task debug {
 }
 
 spotbugs {
-    showProgress = true
-    ignoreFailures = true
+    showProgress.set(true)
+    ignoreFailures.set(true)
 }
 
 spotbugsMain {
@@ -124,6 +124,67 @@ spotbugsMain {
             stylesheet = "fancy-hist.xsl"
         }
     }
+}
+
+spotbugsTest.onlyIf { false }
+shadowJar.onlyIf { false }
+shadowDistZip.onlyIf { false }
+shadowDistTar.onlyIf { false }
+distZip.onlyIf { false }
+distTar.onlyIf { false }
+
+def os = OperatingSystem.current();
+jlink {
+    options = ["--bind-services", "--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"]
+
+    launcher {
+        noConsole = false
+    }
+    jpackage {
+        jvmArgs = ["-Dfile.encoding=UTF-8"]
+
+        imageName = project.name
+        appVersion = project.version.split("-")[0]
+
+        //def imgType = os.windows ? 'ico' : os.macOsX ? 'icns' : 'png'
+        //icon = "src/main/resources/icon.$imgType"
+
+        // Broken (JDK-16 maybe fixes)
+        skipInstaller = true
+        /*installerName = project.name
+        if(os.windows) {
+            installerName += "-Win64-Installer"
+            installerType = "msi"
+            installerOptions += ["--win-dir-chooser", "--win-menu", "--win-menu-group", "Harmless_Tech", "--win-shortcut"]
+        }
+        else if(os.linux) {
+            installerName += "-Linux64-Installer"
+            installerType = "rpm"
+            installerOptions += ["--linux-menu-group", "Harmless_Tech", "--linux-shortcut"]
+        }
+        else if(os.macOsX) {
+            installerName += "-MacOS-Installer"
+            installerType = "pkg"
+        }*/
+    }
+}
+tasks.jpackageImage.doLast {
+    /*copy {
+        from listNativePaths()
+        into "$buildDir/jpackage/$project.name/app/natives"
+    }*/
+    /*exec {
+        workingDir "$buildDir"
+        if(os.windows) {
+            commandLine "$System.env.JAVA_16_HOME/bin/jpackage", "--type", "exe", "--dest", "$buildDir/jpackage",
+                    "--name", project.name + "-Win64-Installer", "--app-version", project.version.split("-")[0],
+                    "--app-image", "$buildDir/jpackage/" + project.name, "--vendor", "Harmless_Tech",
+                    "--win-dir-chooser", "--win-menu", "--win-menu-group", "Harmless_Tech", "--win-shortcut",
+                    "--win-console"
+        }
+        else
+            println("jPackage installer not configured for this os yet.")
+    }*/
 }
 
 test {
